@@ -223,7 +223,7 @@ public class JQueryTyRuBaAPI extends JQueryAPI {
 		JQueryResultSet rs = null;
 
 		try {
-			Job.getJobManager().beginRule(JQueryAPI.getRule(), null);
+//			Job.getJobManager().beginRule(JQueryAPI.getRule(), null);
 
 			JQuery q = _createQuery(propertyName + "(!T,?T)");
 			q.bind("!T", target);
@@ -238,7 +238,7 @@ public class JQueryTyRuBaAPI extends JQueryAPI {
 		} catch (JQueryException e) {
 			JQueryBackendPlugin.error("getStringProperty(): ", e);
 		} finally {
-			Job.getJobManager().endRule(JQueryAPI.getRule());
+//			Job.getJobManager().endRule(JQueryAPI.getRule());
 			if (rs != null) {
 				rs.close();
 			}

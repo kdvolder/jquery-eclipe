@@ -140,7 +140,7 @@ public class TyRuBaQuery extends JQuery {
 		TyRuBaQueryResultSet result = null;
 
 		try {
-			Job.getJobManager().beginRule(JQueryAPI.getRule(), null);
+//			Job.getJobManager().beginRule(JQueryAPI.getRule(), null);
 			if (query == null) {
 				query = getQuery();
 			}
@@ -150,8 +150,8 @@ public class TyRuBaQuery extends JQuery {
 			throw new JQueryTyRuBaException("Executing query: " + getString() + ": " + e.getMessage());
 		} catch (JQueryException e) {
 			throw new JQueryTyRuBaException("Executing query: " + getString() + ": " + e.getMessage());
-		} finally {
-			Job.getJobManager().endRule(JQueryAPI.getRule());
+//		} finally {
+//			Job.getJobManager().endRule(JQueryAPI.getRule());
 		}
 
 		return result;
