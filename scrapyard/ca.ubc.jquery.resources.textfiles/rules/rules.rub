@@ -1,0 +1,9 @@
+rubFile :: String
+PERSISTENT MODES
+	(F) IS NONDET
+END
+
+rubFolder :: String, String
+PERSISTENT MODES
+	(F,F) IS NONDET
+END

@@ -1,0 +1,7 @@
+// JQuery-based refactorings are configured through this predicate (somewhat like menuItem):
+// refactoring(?this, [labelString], queryString, javaRefactoringClassName, 
+//             [refactoringArgVar0, refactoringArgVar1, ...]) :- applicabilityExpression.
+refactoring :: Object, [String], String, String, [String]
+MODES
+    (B,F,F,F,F) IS NONDET
+END

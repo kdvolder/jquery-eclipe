@@ -1,0 +1,46 @@
+// These four predicates are somewhat like AspectJ's "declare warning" and "declare error".
+// They are used for JQuery declared markers support (ca.ubc.jquery.markers plugin).
+
+// TODO: consider using child/2 for consistency?
+// FIXME: Using Warning/Error types doesn't work.
+
+// These two declare warnings/errors associated with code elements.
+// declareWarning(?codeElement, "warning text")
+declareWarning :: Object, String
+MODES
+	(B,B) REALLY IS SEMIDET
+	(F,F) IS NONDET
+END
+
+// declareError(?codeElement, "error text")
+declareError :: Object, String
+MODES
+	(B,B) REALLY IS SEMIDET
+	(F,F) IS NONDET
+END
+
+// You can also declare a warning/error directly on a specific source code location (e.g. for
+// a method call.)
+// declareWarningLocation(?loc, "warning text")
+declareWarningLocation :: SourceLocation, String
+MODES
+	(B,B) REALLY IS SEMIDET
+	(F,F) IS NONDET
+END
+
+// declareErrorLocation(?loc, "error text")
+declareErrorLocation :: SourceLocation, String
+MODES
+	(B,B) REALLY IS SEMIDET
+	(F,F) IS NONDET
+END
+
+// For convenience in dealing with declared warnings/errors
+declareWarningLocation(?loc,?msg) :- declareWarning(?obj,?msg),sourceLocation(?obj,?loc).
+declareErrorLocation(?loc,?msg) :- declareError(?obj,?msg),sourceLocation(?obj,?loc).
+
+// These aren't really working yet...
+baseImage(?X, Warning) :- declareWarning(?,?X);declareWarningLocation(?,?X).
+baseImage(?X, Error) :- declareError(?,?X);declareErrorLocation(?,?X).
+topQuery(["JQuery-declared warnings"], "declareWarning(?W,?E);declareWarningLocation(?W,?E)",["?W","?E"]).
+topQuery(["JQuery-declared errors"], "declareError(?W,?E);declareErrorLocation(?W,?E)",["?W","?E"]).

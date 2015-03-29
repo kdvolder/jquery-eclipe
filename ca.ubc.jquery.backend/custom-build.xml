@@ -1,0 +1,343 @@
+<project name="jquery" default="dist" basedir=".">
+
+    <!-- We are now using an update site and feature project to build
+         and publish the JQuery plugin. This build file is *almost* 
+         obsolote.
+         
+         Most of what the build file does is now done by building the
+         feature or update-site.
+         
+         We are keeping the build.xml file because
+         
+         a) it contains some script code to build tyruba and add it to
+            the lib/ directory.
+            
+         b) you never know if one might want to build a .zip file
+            release.
+            
+         Note: the original of this file was called build.xml, but
+         this name can not be used since the update site process erases
+         any such file. => renamed to custom-build.xml
+      -->
+
+	<!-- =================================================== -->
+	<!--                    GLOBALS							 -->	
+	<!-- =================================================== -->
+	
+	<!-- Properties -->
+	
+	<property name="workspaceDir" value="${basedir}/.."/>
+	
+	<property name="pluginsDir" value="${eclipseDir}/plugins"/>
+		
+	<property name="projectDir" value="${workspaceDir}/ca.ubc.jquery.backend"/>
+	<property name="libDir" value="${projectDir}/lib"/>
+	<property name="libSourceDir" value="${projectDir}/lib"/>
+	
+	<property name="tyrubaDir" value="${workspaceDir}/tyruba"/>
+	<property name="tyrubaBin" value="${tyrubaDir}/build"/>
+	<property name="tyrubaSrc" value="${tyrubaDir}/src"/>
+	<property name="featureDir" value="${projectDir}/feature"/>
+	<property name="featureDir.temp" value="${featureDir}/temp"/>
+	<property name="siteDir" value="${projectDir}/site"/>
+	
+	
+	<property name="version" value="3.1.6"/>
+	
+	
+	<!-- Classpath -->
+
+	<path id="cp">
+	    <pathelement path="src"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.core.resources_3.0.0/resources.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.ui_3.0.0/workbench.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.ui.win32_3.0.0/workbenchwin32.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.swt.win32_3.0.0/ws/win32/swt.jar"/>
+		<pathelement location="${pluginsDir}/org.eclipse.swt.motif_3.0.0/ws/motif/swt.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.core.runtime_3.0.0/runtime.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.jdt.core_3.0.0/jdtcore.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.jdt.ui_3.0.0/jdt.jar"/>
+	    <pathelement location="${pluginsDir}/org.apache.xerces_4.0.13/xmlParserAPIs.jar"/>
+	    <pathelement location="${pluginsDir}/org.apache.xerces_4.0.13/xercesImpl.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.core.boot_3.0.0/boot.jar"/>
+	    <pathelement location="${libDir}/jakarta-regexp-1.2.jar"/>
+	    <pathelement location="${libDir}/activation.jar"/>
+	    <pathelement location="${libDir}/mail.jar"/>
+	    <pathelement location="${libDir}/tyruba.jar"/>
+		<pathelement location="${libDir}/junit.jar"/>
+	</path>
+
+
+	<!-- =================================================== -->
+	<!--                    INIT							 -->	
+	<!-- =================================================== -->
+
+   <target name="init">
+   
+		<tstamp>
+			<format property="TODAY" pattern="yyyy-MMM-dd"/>
+  		</tstamp>
+
+   </target>
+
+	<!-- =================================================== -->
+	<!--                    DOC								 -->	
+	<!-- =================================================== -->
+
+	<target 
+		name="doc" 
+		depends="init"
+		description="Creates the javadoc files.">
+
+		<mkdir dir="javadoc"/>
+      
+		<javadoc 
+			packagenames="ca.*,tyRuBa.*"
+			sourcepath="src"
+			destdir="javadoc"
+			private="true"
+			use="true"
+			version="true"
+			windowtitle="${ant.project.name}">
+
+			<classpath refid="cp"/>
+	         
+			<link 
+				offline="false"
+				href="http://java.sun.com/products/jdk/1.2/docs/api/"
+				packagelistLoc="http://java.sun.com/products/jdk/1.2/docs/api/"
+			/>
+
+			<link 
+				offline="false"
+				href="http://www.eclipse.org/documentation/html/plugins/org.eclipse.platform.doc.isv/doc/reference/api/"
+				packagelistLoc="http://www.eclipse.org/documentation/html/plugins/org.eclipse.platform.doc.isv/doc/reference/api/package-list"
+			/>
+
+		
+		</javadoc>
+
+	</target>
+
+	<!-- =================================================== -->
+	<!--                    DIST							 -->	
+	<!-- =================================================== -->
+
+	<target 
+		name="dist"
+		depends="init"
+		description="Makes the files necessary to install the plugin.">
+
+		<delete dir="dist"/>		
+		<mkdir dir="dist"/>
+
+		<!-- COPY PUGIN.XML -->
+		
+		<copy 
+			file="plugin.xml"
+			todir="dist"
+		/>
+		<mkdir dir="dist/META-INF"/>
+		<copy todir="dist/META-INF">
+			<fileset dir="META-INF"/>
+		</copy>
+	
+		<!-- COPY THE LIBRARIES -->
+		
+		<mkdir dir="dist/lib"/>
+		<copy todir="dist/lib">
+			<fileset dir="lib"/>
+		</copy>
+		
+		<!-- COPY THE ICONS -->
+		
+		<mkdir dir="dist/icons"/>
+		<copy todir="dist/icons">
+			<fileset 
+				dir="icons"
+				includes="**/*.gif"
+			/>
+		</copy>
+
+		<!-- COPY THE RULES -->
+		
+		<mkdir dir="dist/rules"/>
+		<copy todir="dist/rules">
+			<fileset 
+				dir="rules"
+				excludes="user.rub"/>
+		</copy>
+		<touch file="dist/rules/user.rub"/>
+		
+
+		<!-- JAR THE SOURCE FILES -->
+		
+		<jar 
+			jarfile="dist/${ant.project.name}-src.jar" 
+			basedir="src"
+			includes="**/*"
+		/>
+		
+		<!-- CREATE THE JAR FILE -->
+		
+		<jar 
+			jarfile="dist/${ant.project.name}.jar" 
+			basedir="bin"
+			includes="**/*"
+		/>
+		
+		<!-- CREATE sourceloc.jar FILE: this can be used to put on the
+		     tyruba classpath to be able to read JQuery databases offline. !-->
+		<jar
+			jarfile="dist/sourceloc.jar" 
+			basedir="bin"
+			includes="ca/ubc/jquery/ast/SourceLocation.class"
+		/>
+
+		<!-- ZIP THE DIST DIRECTORY -->
+		
+		<mkdir dir="zip"/>
+		<zip zipfile="zip/${ant.project.name}-${TODAY}-dist.zip">
+			<zipfileset 
+				dir="dist"
+				prefix="ca.ubc.jquery"
+			/>
+		</zip>
+		
+		<!-- COPY THE ZIP FILE TO latest.zip -->
+		<copy
+			file="zip/${ant.project.name}-${TODAY}-dist.zip"
+			tofile="zip/latest.zip"/>
+
+	</target>
+
+	<!-- =================================================== -->
+	<!--                    ZIP_PROJECT						 -->	
+	<!-- =================================================== -->
+
+	<target 
+		name="zip_project"
+		depends="init"
+		description="Zips all the project files.">
+
+		<mkdir dir="zip"/>
+
+		<zip zipfile="zip/${ant.project.name}-${TODAY}-project.zip">
+			<fileset dir=".">
+				<patternset>
+					<include name="**/*"/>
+					<exclude name="zip/*"/>
+					<exclude name="doc/*"/>
+					<exclude name="dist/*"/>
+					<exclude name="bin/*"/>
+				</patternset>
+			</fileset>
+		</zip>
+
+	</target>
+
+	<!-- =================================================== -->
+	<!--                    TYRUBADOC 						 -->	
+	<!-- =================================================== -->
+
+	<target 
+		name="tyrubadoc"
+		depends="init"
+		description="Generates html documentation for the website.">
+	
+		<java classname="tyRuBa.applications.TyrubaDoc" fork="true">
+
+			<arg value="${projectDir}/rules/initfile.rub"/>
+
+			<arg value="${projectDir}/website/documentation.htm"/>
+			
+			<arg value="${projectDir}/website/docheader.htm"/>
+
+			<arg value="${projectDir}/website/docfooter.htm"/>
+				
+			<classpath>
+				<path refid="cp"/>
+				<pathelement path="bin"/>
+			</classpath>
+		
+		</java>
+		
+		
+	</target>
+	<!-- =================================================== -->
+	<!--                    JAR_TYRUBA 						 -->	
+	<!-- =================================================== -->
+
+	<target 
+		name="jar_tyruba"
+		depends="init"
+		description="Creates a jar file from the tyruba project in the /lib directory.">
+
+		<!-- CREATE THE JAR FILE -->
+		
+		<jar 
+			jarfile="${libDir}/tyruba.jar" 
+			basedir="${tyrubaBin}"
+			includes="**/*"
+		/>
+		
+		<!-- Include the tyruba sources from which tyruba.jar was generated (for easy reference) -->
+		
+		<jar 
+		    jarfile="${libSourceDir}/tyruba_src.jar"
+		    basedir="${tyrubaDir}"
+			includes="**/*"
+			excludes="**/*.tar* **/fdb*/** bin/** dist/** test*/** zip/** build/** jars/** perfdata/**"
+		/>  
+	
+	</target>
+	
+	<!-- =================================================== -->
+	<!--                    BUILD FEATURE					 -->	
+	<!-- =================================================== -->
+	
+	<target name="build.feature" depends="dist" description="Builds the JQuery feature">
+		<mkdir dir="${featureDir}"/>		
+		<mkdir dir="${featureDir.temp}"/>		
+		<mkdir dir="${featureDir.temp}/plugins"/>		
+		<mkdir dir="${featureDir.temp}/plugins/ca.ubc.jquery_${version}"/>		
+		<mkdir dir="${featureDir.temp}/features"/>		
+		<mkdir dir="${featureDir.temp}/features/ca.ubc.jquery_${version}"/>		
+		<copy todir="${featureDir.temp}/features/ca.ubc.jquery_${version}" file="feature.xml"/>
+		<copy todir="${featureDir.temp}/plugins/ca.ubc.jquery_${version}">
+			<fileset dir="dist"/>
+		</copy>
+		
+		<zip 
+			zipfile="${featureDir}/ca.ubc.jquery_${version}.zip" 
+			basedir="${featureDir.temp}"
+			includes="**/*"
+		/>
+		
+		<delete dir="${featureDir.temp}"/>
+	</target>
+
+	
+	<!-- =================================================== -->
+	<!--                    BUILD SITE						 -->	
+	<!-- =================================================== -->
+	
+	<target name="build.site" depends="dist, build.feature" description="Builds the JQuery update site">
+		<mkdir dir="${siteDir}"/>
+		<delete dir="${siteDir}/features"/>
+		<delete dir="${siteDir}/plugins"/>
+		
+		<mkdir dir="${siteDir}/plugins"/>
+		<mkdir dir="${siteDir}/features"/>
+		
+		<jar destfile="${siteDir}/features/ca.ubc.jquery_${version}.jar" 
+			basedir="."
+			includes="feature.xml"/>
+
+		<jar destfile="${siteDir}/plugins/ca.ubc.jquery_${version}.jar"
+			basedir="dist"
+			includes="**/*"/>
+			
+		<copy overwrite="true" todir="${siteDir}" file="site.xml"/>
+	</target>
+</project>

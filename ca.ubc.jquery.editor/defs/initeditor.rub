@@ -1,0 +1,152 @@
+//
+// initeditor.rub
+//
+// This rub file defines essential predicates for JQuery to add syntax
+// highlighting to editors.
+//
+//
+//
+// HOW TO USE SYNTAX HIGHLIGHTING
+// ==============================
+// You start by telling JQuery what types of files you want to highlight
+// and defining an editor to manage the syntax style.  Use JQE_editor/2 to
+// define an editor which is loaded when a file of the given type is 
+// selected.  To open the editor, select "Open with..." from the Eclipse
+// context menu and select the JQuery Editor. 
+//
+// To enable highlighting, we have to define syntaxElements for the JQuery
+// editor.  These elements are created by processing the text using 
+// syntaxRules and when they're identified, they're given a label.  Once,
+// labeled, they are coloured based on the label they have been given.
+//
+// To define, syntaxElements, see the JQE_syntaxRule/5 below.  These pattern
+// matching rules define what elements are matched to what type to enable
+// highlighting.
+//
+// Once you've defined a few rules to identify syntaxElements, define some
+// colours to apply to those syntaxElements using JQE_textcolor/5,
+// JQE_textbackcolor/5, or JQE_textstyle/3.
+//
+
+
+
+// ----------------------------------------------------------------
+// Editor predicates looks like this:
+// 	JQE_editor( fileType, editorId )
+JQE_editor :: String, String
+MODES
+	(B,F) IS DET
+END
+
+
+
+// ----------------------------------------------------------------
+// Editor text color sets the foreground color
+// 	JQE_textcolor( editorId, syntaxElement, red, green, blue ).
+JQE_textcolor :: String, String, Integer, Integer, Integer
+MODES
+	(B,B,F,F,F) IS DET
+END
+
+
+// ----------------------------------------------------------------
+// Editor text color sets the background color
+// 	JQE_textbackcolor( editorId, syntaxElement, red, green, blue ).
+JQE_textbackcolor :: String, String, Integer, Integer, Integer
+MODES
+	(B,B,F,F,F) IS DET
+END
+
+
+
+// ----------------------------------------------------------------
+// Editor text style sets the font style
+// 	JQE_textstyle( editorId, syntaxElement, [style1, style2, ...] ).
+//
+// Style options are:
+//		1) "bold"
+//		2) "italic"
+JQE_textstyle :: String, String, [String]
+MODES
+	(B,B,F) IS DET
+END
+
+
+
+
+// ----------------------------------------------------------------
+// Editor syntax rules are split into four categories (for now...):
+//
+//	1) single-line rule:
+//			ex. JQE_syntaxRule( editorId, syntaxElement, "single-line", start, end ).
+//
+// This rule will match everything between the start expression and end expression but
+// only until the end of the line.
+//
+//	2) multi-line rule:
+//			ex. JQE_syntaxRule( editorId, syntaxElement, "multi-line", start, end ).
+//
+// This rule will match everything between the start expression and end expression
+// even if it spans multiple lines. 
+//
+//	3) single-char rule:
+//			ex. JQE_syntaxRule( editorId, syntaxElement, "single-char" , start, end ).
+//
+// This rule will match any single character defined in start (end is meaningless here)
+//
+//	4) pattern-match rule:
+//			ex. JQE_syntaxRule( editorId, syntaxElement, "pattern-match", start, end ).
+//
+// This rule will match anything that fits between start expression and end expression (or
+// end of line, whichever comes first).
+//
+JQE_syntaxRule :: String, String, String, String, String
+MODES
+	(B,F,F,F,F) IS NONDET
+END
+
+
+
+
+// ----------------------------------------------------------------
+//	Editor word rule.  This rule defines a word in the language.  
+//		ex. JQE_syntaxWordRule( editorId, start, end ).
+//
+// A word is matched as anything which starts with one character from start
+// and will end when one of the characters from end is reached.  Typically you
+// would want words to start with an alphabet character and end with something
+// typically non-alphabetic but some languages support hyphenated words or numeric
+// words so these options are available.
+//
+// This rule requires word definitions using JQE_syntaxWord below.  A word can
+// be matched exactly using the JQE_syntaxWord/3 predicate which says that if
+// an exact word is found, assign it the certain syntax type.
+//
+// This rule will only match words on a single line.
+//
+JQE_syntaxWordRule :: String, String, String
+MODES
+	(B,F,F) IS DET
+END
+
+
+JQE_syntaxSourceLocationRule :: String, String, String, Integer, Integer
+MODES
+	(B,B,F,F,F) IS NONDET
+	(B,F,F,F,F) IS NONDET
+END
+
+
+
+
+
+// ----------------------------------------------------------------
+// Editor syntax words look like this:
+// 	JQE_syntaxWord( editorId, syntaxElement, word )
+JQE_syntaxWord :: String, String, String
+MODES
+	(B,F,F) IS NONDET
+END
+
+
+#include "editor-tyruba.rub"

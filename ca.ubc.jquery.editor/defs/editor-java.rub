@@ -1,0 +1,90 @@
+JQE_editor("java","java").
+
+JQE_textcolor("java","keyword",	0, 0, 255).
+JQE_textstyle("java","keyword",	["bold"]).
+JQE_textcolor("java","comment",	128, 128, 128).
+JQE_textcolor("java","javadoc", 128, 128, 196).
+JQE_textcolor("java","syntax",	0, 0, 128).
+JQE_textcolor("java","number", 	128, 0, 128).
+JQE_textcolor("java","quote",	0, 128, 128).
+
+JQE_textstyle("java","static-method", 	["italic"]).
+JQE_textcolor("java","static-method", 	128,64,64).
+JQE_textcolor("java","field", 	255,0,0).
+JQE_textcolor("java","method", 	128,64,64).
+JQE_textcolor("java","type",	128,64,128).
+
+
+JQE_syntaxRule("java","javadoc","multi-line", "/**","*/").
+JQE_syntaxRule("java","javadoc","single-line", "///","").
+JQE_syntaxRule("java","comment","single-line","//","").
+JQE_syntaxRule("java","comment","multi-line","/*","*/").
+
+JQE_syntaxRule("java","quote","single-line","\"","\"").
+JQE_syntaxRule("java","quote","single-line","'","'").
+JQE_syntaxRule("java","syntax","single-char","<>{}();,[]=-+*/%^!","").
+JQE_syntaxRule("java","number","single-char","0123456789","").
+
+
+JQE_syntaxSourceLocationRule("java",?file,"field",?st,?len) :- field(?f), 
+	(	sourceLocation(?f,SourceLocation<?file,?st,?len>) ; 
+		accesses(?,?,SourceLocation<?file,?st,?len>) ).
+JQE_syntaxSourceLocationRule("java",?file,"method",?st,?len) :- 
+	( sourceLocation(?m,SourceLocation<?file,?st,?len>),(constructor(?m);method(?m)) ).
+JQE_syntaxSourceLocationRule("java",?file,"method",?st,?len) :- 
+	( calls(?m,?,SourceLocation<?file,?st,?len>) ; calls(?,?m,SourceLocation<?file,?st,?len>) ).
+
+	
+JQE_syntaxWordRule("java",
+	"abcdefghijklkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+	" {}[]();:'\"<>,./\\|!@#$%^&*-_=+~`").
+
+	// special treatment
+//	JQE_syntaxWord("java","field",?X) :- field(?f),name(?f,?X).
+//	JQE_syntaxWord("java","method",?X) :- method(?m),name(?m,?X).
+//	JQE_syntaxWord("java","type",?X) :- class(?Y),name(?Y,?X).
+//	JQE_syntaxWord("java","static-method",?X) :- method(?m),modifier(?m,"static"),name(?m,?X).
+
+	// keywords...
+	JQE_syntaxWord("java","keyword","final").
+	JQE_syntaxWord("java","keyword","static").
+	JQE_syntaxWord("java","keyword","public").
+	JQE_syntaxWord("java","keyword","protected").
+	JQE_syntaxWord("java","keyword","private").
+	JQE_syntaxWord("java","keyword","throws").
+	JQE_syntaxWord("java","keyword","native").
+
+	JQE_syntaxWord("java","keyword","import").
+	JQE_syntaxWord("java","keyword","package").
+
+	JQE_syntaxWord("java","keyword","new").
+	JQE_syntaxWord("java","keyword","class").
+	JQE_syntaxWord("java","keyword","interface").
+	JQE_syntaxWord("java","keyword","implements").
+	JQE_syntaxWord("java","keyword","extends").
+	JQE_syntaxWord("java","keyword","abstract").
+
+	JQE_syntaxWord("java","keyword","void").
+	JQE_syntaxWord("java","keyword","int").
+	JQE_syntaxWord("java","keyword","float").
+	JQE_syntaxWord("java","keyword","double").
+	JQE_syntaxWord("java","keyword","long").
+	JQE_syntaxWord("java","keyword","true").
+	JQE_syntaxWord("java","keyword","false").
+	JQE_syntaxWord("java","keyword","null").
+	
+	JQE_syntaxWord("java","keyword","try").
+	JQE_syntaxWord("java","keyword","catch").
+	JQE_syntaxWord("java","keyword","finally").
+	JQE_syntaxWord("java","keyword","throws").
+	JQE_syntaxWord("java","keyword","throw").
+	JQE_syntaxWord("java","keyword","return").
+	
+	JQE_syntaxWord("java","keyword","break").
+	JQE_syntaxWord("java","keyword","continue").
+	JQE_syntaxWord("java","keyword","for").
+	JQE_syntaxWord("java","keyword","do").
+	JQE_syntaxWord("java","keyword","while").
+	JQE_syntaxWord("java","keyword","until").
+	JQE_syntaxWord("java","keyword","if").
+	JQE_syntaxWord("java","keyword","else").

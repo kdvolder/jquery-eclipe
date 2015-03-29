@@ -1,0 +1,65 @@
+//
+// Browser linking filters
+//
+updateTargetFilter("File", "CU(!this)").
+updateTargetFilter("Types","type(!this)").
+updateTargetFilter("Top level types","package(?P),child(?P,?CU),child(?CU,!this),type(!this)").
+updateTargetFilter("Methods","Callable(!this)").
+updateTargetFilter("Members","Callable(!this);field(!this);Enum(!this)").
+updateTargetFilter("Outline","import(!this);Callable(!this);field(!this);Enum(!this)").
+updateTargetFilter("Fields","field(!this)").
+updateTargetFilter("Packages","package(!this)").
+
+//
+// View Type Filters
+//
+//filterItem(?this,["fields"],"field(!this)").
+//filterItem(?this,["methods"],"method(!this);constructor(!this)").
+
+//
+// Modifier Filters
+//
+filterItem(?this,["modifiers","public"],"modifier(!this,public)") :- 
+    constructor(?this);method(?this);field(?this);Type(?this).
+    
+filterItem(?this,["modifiers","protected"],"modifier(!this,protected)") :- 
+constructor(?this);method(?this);field(?this);Type(?this).
+	
+filterItem(?this,["modifiers","private"],"modifier(!this,private)") :- 
+constructor(?this);method(?this);field(?this);Type(?this).
+    
+filterItem(?this,["modifiers","static"],"modifier(!this,static)") :-
+    method(?this);field(?this);Type(?this).
+    
+filterItem(?this,["modifiers","abstract"],"modifier(!this,abstract)") :-
+    method(?this);Type(?this).
+
+//
+// Scoping Filters
+//    
+filterItem(?this,["scope","In package",?Package], {package(!this,??P),equals(??P,?Pk)} ) :-
+	(method(?this);constructor(?this);Type(?this)), package(?Pk),name(?Pk,?Package).
+filterItem(?this,["scope","Not in package",?Package], {package(!this,??P),NOT(equals(??P,?Pk))} ) :-
+	(method(?this);constructor(?this);Type(?this)), (package(?Pk),name(?Pk,?Package)).
+filterItem(?this,["scope","Class",?Pk,?Class], {child(?C,!this)} ) :-
+	(Callable(?this);field(?this)), (class(?C),name(?C,?Class),package(?C,?P),name(?P,?Pk)).
+
+// 
+// Class Filters
+//
+filterItem(?this,["interface"],"interface(!this)") :-
+	Type(?this).
+filterItem(?this,["anonymous"],"anonymous(!this,?)") :-
+	Type(?this).	
+
+//
+// Method Filters
+//
+filterItem(?this,["has parameters"],"params(!this,?P)") :-
+	constructor(?this);method(?this).
+	
+filterItem(?this,["throws exception"],"throws(!this,?E)") :-
+   	method(?this).
+
+filterItem(?this,["throws...",?ExName],{throws(!this,??E),equals(??E,?Ex)}) :-
+	method(?this), (throws(?,?Ex),name(?Ex,?ExName)).

@@ -1,0 +1,27 @@
+
+// Object, name of smell, description
+codeSmell :: Object, String, String
+MODES
+	(B,B,F) REALLY IS SEMIDET
+	(F,F,F) IS NONDET
+END
+
+pasteSnippet("codeSmell(?X,?Name,?Description)", "?X exhibits code smell ?Name with description ?Description").
+
+// Some names and descriptions taken from
+// http://wiki.java.net/bin/view/People/SmellsToRefactorings
+
+// declareWarningLocation(?loc, "Calls Deprecated Method")
+//   :- calls(?,?M,?loc),hasAnnotation(?M,?A),name(?A,Deprecated).
+
+codeSmell(?this, {Method ?Name has more than 5 parameters}, "Don't pass in everything the method needs; pass in enough so that the method can get to everything it needs.")
+  :- params(?this,?P),name(?this,?Name),length(?P,?S),greater(?S,5).
+  
+codeSmell(?this, {Class ?Name has more than 10 fields}, "A class that is trying to do too much can usually be identified by looking at how many instance variables it has. When a class has too many instance variables, duplicated code cannot be far behind.")
+  :- class(?this),name(?this,?Name),NOT(modifier(?this,static)),COUNTALL((field(?this,?F),NOT(modifier(?F,static))),?F,?I),greater(?I,10).
+  
+// codeSmell(?this, "Declarative Incompleteness", "") :- certainMissingElement(?this,?,?).
+
+declareError(?subM, {Overridden checkFinalConditions should call superclass method}) :- overrides(?subM,?supM),method(?sup,?supM),method(?sub,?subM),name(?sup,QueryBasedRefactoring),name(?supM,checkFinalConditions),NOT(calls(?subM,?supM,?)).
+
+declareWarning(?X, {Code smell: ?msg}) :- codeSmell(?X,?msg,?).

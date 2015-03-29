@@ -1,0 +1,37 @@
+JQE_editor("rub","tyruba").
+
+JQE_textcolor("tyruba","keyword",	128,128,0).
+JQE_textcolor("tyruba","variable",	128, 0, 128).
+JQE_textcolor("tyruba","comment",	128, 128, 128).
+JQE_textcolor("tyruba","quote",		0, 128, 128).
+JQE_textcolor("tyruba","syntax",	0, 0, 255).
+
+JQE_textcolor("tyruba","jdoc",		192,64,0).
+JQE_textcolor("tyruba","annote",	192,64,0).
+JQE_textstyle("tyruba","annote", 	["bold"]).
+
+JQE_syntaxWordRule("tyruba",
+	"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+	" {}[]();:'\"<>,./\\|!@#$%^&*-_=+~`?").
+
+	JQE_syntaxWord("tyruba","keyword","MODES").
+	JQE_syntaxWord("tyruba","keyword","PERSISTENT").
+	JQE_syntaxWord("tyruba","keyword","END").
+	JQE_syntaxWord("tyruba","keyword","IS").
+	JQE_syntaxWord("tyruba","keyword","FREE").
+	JQE_syntaxWord("tyruba","keyword","DET").
+	JQE_syntaxWord("tyruba","keyword","REALLY").
+	JQE_syntaxWord("tyruba","keyword","SEMIDET").
+	JQE_syntaxWord("tyruba","keyword","NONDET").
+
+
+JQE_syntaxRule("tyruba","jdoc","multi-line","/**","*/").
+
+JQE_syntaxRule("tyruba","comment","multi-line",	"/*","*/").
+JQE_syntaxRule("tyruba","comment","single-line","//","").
+
+JQE_syntaxRule("tyruba","quote","single-line","\"","\"").
+JQE_syntaxRule("tyruba","quote","single-line","'","'").
+
+JQE_syntaxRule("tyruba","variable","pattern-match",	"?"," {}[]();:'\"<>,./\\|!@#$%^&*-_=+~`").
+JQE_syntaxRule("tyruba","syntax","single-char","{}()[];,:-.","").

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         id="jQueryMarkersBuilder"
+         name="JQuery Markers Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="ca.ubc.jquery.markers.builder.JQueryMarkersBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="jQueryMarkersNature"
+         name="JQuery Markers Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="ca.ubc.jquery.markers.builder.JQueryMarkersNature">
+         </run>
+      </runtime>
+      <builder
+            id="ca.ubc.jquery.markers.jQueryMarkersBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
+            nameFilter="*"
+            id="ca.ubc.jquery.markers.contribution1">
+         <visibility>
+            <not>
+               <objectState
+                     value="ca.ubc.jquery.markers.jQueryMarkersNature"
+                     name="nature"/>
+            </not>
+         </visibility>
+         <action
+               label="Enable JQuery markers"
+               class="ca.ubc.jquery.markers.builder.ToggleNatureAction"
+               menubarPath="additions"
+               enablesFor="1"
+               id="ca.ubc.jquery.markers.addNatureAction">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
+            nameFilter="*"
+            id="ca.ubc.jquery.markers.contribution2">
+         <visibility>
+            <objectState
+                  value="ca.ubc.jquery.markers.jQueryMarkersNature"
+                  name="nature"/>
+         </visibility>
+         <action
+               label="Disable JQuery markers"
+               class="ca.ubc.jquery.markers.builder.ToggleNatureAction"
+               menubarPath="additions"
+               enablesFor="1"
+               id="ca.ubc.jquery.markers.removeNatureAction">
+         </action>
+      </objectContribution>
+   </extension>   
+   <extension
+         id="jQueryDeclaredProblem"
+         name="JQuery Declared Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+      <extension
+         id="jQueryAnnotationDeclaredProblem"
+         name="JQuery Annotation-Declared Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+      <extension
+            id="tyrubaProblem"
+            name="TyRuBa Error"
+            point="org.eclipse.core.resources.markers">
+         <super
+               type="org.eclipse.core.resources.problemmarker">
+         </super>
+         <persistent
+               value="true">
+         </persistent>
+      </extension>
+      <extension
+            point="ca.ubc.jquery.backend.includeRules">
+         <RulesDefinition
+               File="rules/declare_markers.rub"
+               Required="true">
+         </RulesDefinition>
+         <RulesDefinition
+               File="rules/code_smells.rub"
+               Required="false">
+         </RulesDefinition>
+      </extension>
+</plugin>

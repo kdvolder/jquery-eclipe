@@ -1,0 +1,55 @@
+label(?X,?Y) :- xmlFile(?X,?Y).
+label(?X,?Y) :- xmlNode(?X,?Y).
+label(?X,?Y) :- xmlAttribute(?X,?Y,?).
+
+label(?X,?Y) :- xmlValue(?X,?Y).
+
+
+baseImage(?X,"xmlfile.GIF") :- xmlFile(?X,?).
+baseImage(?X,"xmlnode.GIF") :- xmlNode(?X,?).
+baseImage(?X,"xmlattrib.GIF") :- xmlAttribute(?X,?,?).
+
+//
+// Rules for PDE customizations
+//
+// categories are causing load errors (SEMIDET/NONDET problem), so disabling
+// for now - AWJB
+//category(?X,1) :- extensionPoint(?X).
+//category(?X,2) :- extension(?X).
+
+baseImage(?X,"pde/extension-point.PNG") :- extensionPoint(?X).
+baseImage(?X,"pde/extension.PNG") :- extension(?X).
+baseImage(?X,"pde/plugin.PNG") :- plugin(?X).
+baseImage(?X,"pde/extensions.PNG") :- extensions(?X).
+baseImage(?X,"pde/extension-points.PNG") :- extensionPoints(?X).
+
+label(?X,?Y) :- extension(?X),xchild(?X,?c),xmlAttribute(?c,"point",?z),label(?z,?Y).
+label(?X,?Y) :- extensionPoint(?X),xchild(?X,?c),xmlAttribute(?c,"id",?z),label(?z,?Y).
+label(?X,"Extensions") :- extensions(?X).
+label(?X,"Extension Points") :- extensionPoints(?X).
+
+
+//
+// Rules for Ant customizations
+//
+//category(?X,1) :- antProperty(?X).
+//category(?X,2) :- antPath(?X).
+//category(?X,3) :- antInit(?X).
+//category(?X,5) :- antTarget(?X).
+
+baseImage(?X,"ant/ant-project.PNG") :- antProject(?X).
+baseImage(?X,"ant/ant-property.PNG") :- antProperty(?X).
+baseImage(?X,"ant/build-property.PNG") :- antTargetProperty(?X).
+baseImage(?X,"ant/build-target.PNG") :- antTarget(?X).
+baseImage(?X,"ant/init.PNG") :- antInit(?X).
+baseImage(?X,"ant/path.PNG") :- antPath(?X).
+
+label(?X,?Y) :- antProject(?X),xchild(?X,?x),xmlAttribute(?x,"name",?z),label(?z,?Y).
+label(?X,?Y) :- antProperty(?X),xchild(?X,?x),xmlAttribute(?x,"name",?z),label(?z,?Y).
+label(?X,?Y) :- antTarget(?X),xchild(?X,?x),xmlAttribute(?x,"name",?z),label(?z,?Y).
+label(?X,?Y) :- antPath(?X),xchild(?X,?x),xmlAttribute(?x,"id",?z),label(?z,?Y).
+
+//label(?X,?Y) :- 
+//	xmlNode(?X,"mkdir",?),xchild(?X,?x),xmlAttribute(?x,"dir",?z),
+//	label(?z,?l),string_append("mkdir ",?l,?A).
+

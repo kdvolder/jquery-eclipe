@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="ca.ubc.jquery.resources.textfiles"
+         name="Text Files"
+         point="ca.ubc.jquery.backend.resource">
+      <Resource
+            JQueryResource="ca.ubc.jquery.resources.textfiles.TextFileStrategy">
+      </Resource>
+      <Definition
+            File="rules/rules.rub">
+      </Definition>
+   </extension>
+
+</plugin>

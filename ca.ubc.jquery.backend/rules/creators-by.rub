@@ -1,0 +1,13 @@
+//
+// creators-by.rub
+//
+
+//
+// Provides a new "creators organized by subtype" menu for interface types.
+//
+
+menuItem(?this,["Creators ...", "Creators by subtype"],
+"subtype*(?this,?Cted),creator(?Cted, ?CtorM, ?Ref), child(?CtorCls,?CtorM), package(?CtorCls,?CtorP),package(?Cted,?CtedP)", 
+["?CtedP","?Cted","?CtorP","?CtorCls","?CtorM","?Ref"]) 
+:- interface(?this).
+	

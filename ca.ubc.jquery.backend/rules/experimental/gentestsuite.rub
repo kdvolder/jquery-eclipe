@@ -1,0 +1,35 @@
+addTest :: String
+MODES (F) IS NONDET END
+
+addTest({        suite.addTestSuite(?PName.?TestName.class);
+}) 
+:- subtype+("junit.framework%.TestCase"::RefType,?Test),
+   NOT(modifier(?Test,abstract)),name(?Test,?TestName),
+   package(?Test,?P),name(?P,?PName).
+   
+testsuite :: String
+MODES (F) IS DET END
+
+testsuite({
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+public class AllTests {
+	
+    public static Test suite() {
+
+        TestSuite suite = new TestSuite();
+	
+        ?addTests
+        
+        return suite;
+    }
+
+    /**
+     * Runs the test suite using the textual runner.
+     */
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(suite());
+    }
+}
+}) :- FINDALL( addTest(?addOne), ?addOne, ?addTests ). 

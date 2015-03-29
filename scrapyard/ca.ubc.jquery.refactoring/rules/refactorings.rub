@@ -1,0 +1,37 @@
+refactoring(?this, ["Add annotation...", ?N], 
+            {Element(!this),annotationDeclaration(??T),name(??T,?N)},
+            "ca.ubc.jquery.refactoring.AddAnnotationsRefactoring",
+            ["!this", "?T"]) :- (method(?this);field(?this);class(?this)),annotationDeclaration(?T),name(?T,?N),
+                            NOT(EXISTS ?Attrib : child(?T,?Attrib),NOT(hasDefault(?Attrib))).
+
+refactoring(?this, ["Remove annotations"], 
+            "annotation(!this)",
+            "ca.ubc.jquery.refactoring.RemoveAnnotationsRefactoring",
+            ["!this"]) :- annotation(?this).
+
+// This uses the Java 5 interpretation of overrides (no @Override for implemented interface methods).
+refactoring(?this, ["Add Override annotation where applicable"],
+            "child+(!this, ?X), method(?X), overrides(?X, ?SupM), method(?C, ?SupM), NOT(interface(?C)), NOT(EXISTS ?A : hasAnnotation(?X,?A), name(?A, Override)), annotationDeclaration(?T), name(?T, Override)",
+            "ca.ubc.jquery.refactoring.AddAnnotationsRefactoring",
+            ["?X", "?T"]).
+            
+refactoring(?this, ["JUnit", "Upgrade JUnit 3 test cases to JUnit 4"],                    
+            "child+(!this,?M),extends(?C,?T),qname(?T,junit.framework.TestCase),method(?C,?M),re_name(?M,/^test/),params(?M,[]),annotationDeclaration(?A),qname(?A,org.junit.Test)",
+            "ca.ubc.jquery.refactoring.AddAnnotationsRefactoring",
+            ["?M", "?A"]).            
+
+/* refactoring(?this, ["Regular expression replace"], 
+  QueryRefactoring<"annotation(!this)",
+                    "ca.ubc.jquery.refactoring.RegexpReplaceAnnotationRefactoring",
+                    ["!this"]>) :- annotation(?this).
+
+refactoring(?this, ["Rename feature"], 
+  QueryRefactoring<"(feature(!this,?E),hasAnnotation(?E,?Annot),name(?Annot,Feature));(exportMarked(?E,!this),hasAnnotation(?E,?Annot),name(?Annot,Export))",
+                    "ca.ubc.jquery.refactoring.subjectj.RenameFeatureRefactoring",
+                    ["?Annot", "!this"]>) :- feature(?this).
+                    
+refactoring(?this, ["Declarative completeness", {Add to feature ?F}],
+  QueryRefactoring<{certainMissingElement(?F,!this,??)},
+                    "ca.ubc.jquery.refactoring.subjectj.RenameFeatureRefactoring", // DUMMY
+                    ["!this", "?F"]>) :- certainMissingElement(?F,?this,?). 
+*/

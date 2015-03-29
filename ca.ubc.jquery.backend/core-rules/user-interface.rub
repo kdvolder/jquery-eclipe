@@ -1,0 +1,116 @@
+//
+// user-interface.rub
+//
+// This file contains the declarations of predicates that form the
+// "user configuration interface".
+//
+// The user can configure JQuery by defining facts and/or rules for
+// these predicates. JQuery calls upon these queries at various
+// points during its execution to find out things such as
+// what menu items to display, what tooltips to show etc.
+
+//--------------------------------------------------------------------
+//Reverse Location Query Rule
+//
+// reverseLocation(?Context,?Object,FileName,Offset,Length)
+//--------------------------------------------------------------------
+// Kris: Why do I need '=Integer' instead of 'Integer'? 
+reverseLocation :: String, Object, String, =Integer, =Integer 
+MODES
+   (FREE,FREE,BOUND,BOUND,BOUND) IS NONDET
+END
+
+locationMatch :: =Integer, =Integer, =Integer, =Integer
+MODES
+    (BOUND,BOUND,BOUND,BOUND) IS DET
+END
+
+//--------------------------------------------------------------------
+// A filter item
+//
+// Defines filters which are displayed on the JQuery context menu.
+// Perhaps this should be deprecated?  The filtering mechanism
+// is clunky and I don't think anyone uses it...
+//--------------------------------------------------------------------
+filterItem :: Object, [String], String 
+MODES
+   (BOUND,FREE,FREE) IS NONDET
+END
+
+//--------------------------------------------------------------------
+// Update target filters
+// 
+// Define link filters for selection and input link filtering
+//--------------------------------------------------------------------
+updateTargetFilter :: String, String
+MODES
+	(FREE,FREE) IS NONDET
+END
+
+
+// --------------------------------------------------------------------
+// Defines the text label shown for an Object that is a query result.
+//
+//  Note: Most users wouldn't be concerned with defining this rule
+//   except if they somehow add new types of objects to the database
+//   and want to make them display custimized text labels.
+// --------------------------------------------------------------------
+label :: Object, String
+MODES
+	(B,F) REALLY IS SEMIDET
+END
+
+// --------------------------------------------------------------------
+// Defines the image that will show up for a query result.
+// --------------------------------------------------------------------
+baseImage :: Object, String
+MODES
+	(B,F) REALLY IS SEMIDET
+END
+  
+// --------------------------------------------------------------------
+// Defines a human readable typename for objects in the database
+// --------------------------------------------------------------------
+elementType :: Object, String
+MODES
+	(B,F) REALLY IS SEMIDET
+END
+
+
+// --------------------------------------------------------------------
+// A "topQuery"  (or top level query) is defined as follows:
+//  topQuery([labelString], queryString ,[varsString0, varsString1, ...]).  
+// --------------------------------------------------------------------
+topQuery :: [String], String, [String]
+MODES
+	(F,F,F) IS NONDET
+END
+
+
+// --------------------------------------------------------------------
+// A menuItem is defined follows:
+// 
+//    menuItem(?this, [labelString], queryString, [varsString0, varsString1, ...]) :- applicabilityExp).   
+// --------------------------------------------------------------------
+menuItem :: Object, [String], String, [String] 
+MODES
+   (BOUND,FREE,FREE,FREE) IS NONDET
+END
+
+// --------------------------------------------------------------------
+// Category sorts elements in the viewers.  The higher category is sorted
+// and displayed before lower categories.
+// --------------------------------------------------------------------
+category :: Object, Integer
+MODES
+	(B,F) IS SEMIDET
+END
+
+// --------------------------------------------------------------------
+// The sort key, if defined for an element, defines its sorting
+// order in the interface.
+// --------------------------------------------------------------------
+sortKey :: Object, Object
+MODES
+ (B, F) IS SEMIDET
+END

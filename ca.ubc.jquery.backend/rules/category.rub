@@ -1,0 +1,19 @@
+//category(?X,1) :- project(?X)....  no corresponding elements in rulebase
+category(?X,2) :- package(?X).
+//category(?X,?3) :- folder(?X)... no corresponding elements in rulebase
+category(?X,4) :- cu(?X).
+//category(?X,5) :- classFile(?X).  //not currently used
+//category(?X,6) :- package declaration... no corresponding elements in rulebase  
+//category(?X,7) :- import(?X).
+//category(?X,7) :- importHeader(?X).
+category(?X,7) :- initializer(?X).
+category(?X,8) :- class(?X).
+category(?X,9) :- interface(?X).
+category(?X,10) :- Enum(?X).
+category(?X,11) :- field(?X).
+category(?X,12) :- constructor(?X).
+category(?X,13) :- method(?X).
+//category(?X,20). // anything else?
+
+
+

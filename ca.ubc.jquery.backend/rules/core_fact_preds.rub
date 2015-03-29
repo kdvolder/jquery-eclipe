@@ -1,0 +1,379 @@
+//
+// core_fact_preds.rub
+// 
+
+//
+// This file defines the core predicates for ground facts 
+
+// The query language consists of two kinds of predicates, depending
+// on how they are implemented.  The "core" predicates contained in this 
+// file have no body, and simply reflect the facts generated and stored by the 
+// JQuery's code parser.   
+
+// The core predicates can be used directly when writing queries, or combined 
+// to create higher level "derived predicates".  The derived predicates are 
+// defined by rules and derive more high-level information from the core facts.
+
+
+// Define documentation groups
+
+tyrubadocGroup(1, core, "Core Facts", "These are the core facts.").
+
+tyrubadoc(core, ?P, ?D) :- 
+		pasteSnippet(?P, ?D).
+
+
+
+//**************************************************************************
+// *** Core predicates  (for ground facts) *********************************
+//**************************************************************************
+
+// *** unary *****
+cu :: CU
+PERSISTENT MODES
+	(F) IS NONDET
+END
+
+package :: Package
+PERSISTENT MODES
+	(F) IS NONDET
+END
+pasteSnippet("package(?Pkg)", "?P is a package").
+
+class :: RefType 
+PERSISTENT MODES
+	(F) IS NONDET
+END
+pasteSnippet("class(?Class)", "?Class is a class").
+
+interface :: RefType 
+PERSISTENT MODES
+	(F) IS NONDET
+END
+pasteSnippet("interface(?Int)", "?Int is an interface").
+
+annotationDeclaration :: RefType 
+PERSISTENT MODES
+	(F) IS NONDET
+END
+pasteSnippet("annotationDeclaration(?AnnotDeclaration)", "?AnnotDeclaration is an annotation declaration").
+
+typevar :: RefType
+PERSISTENT MODES
+	(F) IS NONDET
+END
+pasteSnippet("typevar(?tv)", "?tv is an type variable").
+
+method :: Method
+PERSISTENT MODES
+	(F) IS NONDET
+END
+pasteSnippet("method(?Meth)", "?Meth is a normal method (excludes constructors)").
+
+hasDefault :: Method
+PERSISTENT MODES
+	(F) IS NONDET
+END
+pasteSnippet("hasDefault(?annotAttrib)", "Annotation attribute ?annotAttrib has a default value").
+
+constructor :: Constructor
+PERSISTENT MODES
+  	(F) IS NONDET
+END
+pasteSnippet("constructor(?Cons)", "?Cons is a constructor").
+
+initializer :: Initializer
+PERSISTENT MODES
+	(F) IS NONDET
+END
+//pasteSnippet("initializer(?Init)", "?Init is an initializer block").
+
+field :: Field 
+PERSISTENT MODES
+	(F) IS NONDET
+END
+pasteSnippet("field(?Field)", "?Field is a field").
+
+bookmark :: Bookmark
+PERSISTENT MODES
+    (F) IS NONDET
+END
+pasteSnippet("bookmarks(?B)", "?B is a bookmark").
+
+warning :: Warning
+PERSISTENT MODES
+    (F) IS NONDET
+END
+pasteSnippet("warning(?W)", "?W is a compiler warning").
+
+error :: Error
+PERSISTENT MODES
+    (F) IS NONDET
+END
+pasteSnippet("error(?E)", "?E is a compiler error.").
+
+task :: Task
+PERSISTENT MODES
+    (F) IS NONDET
+END
+pasteSnippet("task(?T)", "?T is a task.").
+
+// *** binary *****
+
+warningToken :: Warning, String
+PERSISTENT MODES
+    (F,F) IS NONDET
+    (B,F) IS SEMIDET
+    (F,B) IS NONDET
+END
+pasteSnippet("warningToken(?W,?T)", "Warning ?W has associated token ?T (which can be used to suppress the warning with @SuppressWarnings).").
+
+priority :: Task, String
+PERSISTENT MODES
+    (F,F) IS NONDET
+    (B,F) IS SEMIDET
+    (F,B) IS NONDET
+END
+pasteSnippet("priority(?T,?P)", "Task ?T has priority ?P.").
+
+javadocLocation :: Element, SourceLocation
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,F) IS SEMIDET
+END
+
+name :: Element, String
+PERSISTENT MODES
+  	(B,F) IS SEMIDET
+  	(F,B) IS NONDET
+END
+pasteSnippet("name(?Element,?NameString)", "?Element has name ?NameString").
+
+
+qname :: Element, String
+PERSISTENT MODES
+	(B,F) IS NONDET
+	(F,B) IS SEMIDET
+END
+pasteSnippet("qname(?Element,?QNameStr)", "?Element has fully qualified name ?QNameStr").
+
+extends :: RefType, RefType
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,F) IS NONDET
+	(F,B) IS NONDET
+END
+pasteSnippet("extends(?RefType1,?RefType2)", "?RefType1 extends ?RefType2").
+
+	
+implements :: RefType, RefType
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,F) IS NONDET
+	(F,B) IS NONDET
+END
+pasteSnippet("implements(?Class,?Interface)", "Class ?Class implements interface ?Interface").
+
+
+throws :: Callable, RefType
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,F) IS NONDET
+	(F,B) IS NONDET
+END
+pasteSnippet("throws(?Callable,?ExType)", "Method or Constructor ?Callable is declared to throw exception of type ?ExType").
+
+type :: Field, Type
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,F) IS SEMIDET
+	(F,B) IS NONDET
+END	
+pasteSnippet("type(?Field,?Type)", "Field ?Field is of type ?Type").
+
+annotType :: Annotation, RefType
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,F) IS SEMIDET
+	(F,B) IS NONDET
+END	
+pasteSnippet("annotType(?Annot,?Type)", "Annotation ?Annot is of type ?Type").
+
+modifier :: Element, String
+PERSISTENT MODES
+  	(F,F) IS NONDET
+  	(F,B) IS NONDET
+  	(B,F) IS NONDET
+END 
+pasteSnippet("modifier(?Element, ?Mod)", "?Element was declared with modifier ?Mod").
+
+
+arg :: Callable, Type
+PERSISTENT MODES 
+	(F,F) IS NONDET
+	(F,B) IS NONDET
+	(B,F) IS NONDET
+END
+tyrubadoc(core, "arg(?M, ?T)", "Method ?M has an argument of type ?T").
+
+
+returns :: Callable, Type
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,F) IS SEMIDET
+	(F,B) IS NONDET
+END
+tyrubadoc(core, "returns(?M, ?T)", "Method ?M has return type ?T").
+
+signature :: Callable, String
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,F) IS SEMIDET
+	(F,B) IS NONDET
+END
+tyrubadoc(core, "signature(?M, ?S)", "Method ?M has signature ?S").
+
+imports :: CU, Element
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,F) IS NONDET
+	(F,B) IS NONDET
+END
+
+defaultValue :: Method, Object
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,F) IS NONDET
+	(F,B) IS NONDET
+END
+pasteSnippet("defaultValue(?annotAttrib,?val)", "Annotation attribute ?annotAttrib has default value ?val").
+
+// *** Ternary ********
+
+methodCall :: Block, Method, SourceLocation
+PERSISTENT MODES
+	(F,F,F) IS NONDET
+	(B,B,F) IS NONDET
+	(B,F,F) IS NONDET
+	(F,B,F) IS NONDET
+END	
+	
+thisCall :: Constructor, Constructor, SourceLocation
+PERSISTENT MODES
+	(F,F,F) IS NONDET
+    (B,B,F) IS NONDET
+	(B,F,F) IS NONDET
+	(F,B,F) IS NONDET
+END
+
+superCall :: Callable, Callable,  SourceLocation
+PERSISTENT MODES
+	(F,F,F) IS NONDET
+	(B,B,F) IS NONDET
+	(B,F,F) IS NONDET
+	(F,B,F) IS NONDET
+END
+
+constructorCall :: Block, Constructor, SourceLocation
+PERSISTENT MODES
+	(F,F,F) IS NONDET
+	(B,B,F) IS NONDET
+	(B,F,F) IS NONDET
+	(F,B,F) IS NONDET
+END
+
+instanceOf :: Block, Type, SourceLocation
+PERSISTENT MODES
+    (F,F,F) IS NONDET
+    (B,B,F) IS NONDET
+	(B,F,F) IS NONDET
+	(F,B,F) IS NONDET
+END
+pasteSnippet("instanceOf(?Block,?Type,?Loc)", 
+	"?Block performs an instanceof test for type ?Type at source location ?Loc").
+	
+typeCast :: Block, Type, SourceLocation
+PERSISTENT MODES
+    (F,F,F) IS NONDET
+    (B,B,F) IS NONDET
+	(B,F,F) IS NONDET
+	(F,B,F) IS NONDET
+END
+pasteSnippet("typeCast(?Block,?Type,?Loc)", 
+	"?Block performs an a cast to ?Type at source location ?Loc").
+
+
+reads :: Block, Field, SourceLocation
+PERSISTENT MODES
+	(F,F,F) IS NONDET
+	(B,B,F) IS NONDET
+	(B,F,F) IS NONDET
+	(F,B,F) IS NONDET
+END
+pasteSnippet("reads(?Block,?Field,?Loc)", "?Block reads ?Field at source location ?Loc").
+
+
+writes ::  Block, Field, SourceLocation
+PERSISTENT MODES
+	(F,F,F) IS NONDET
+	(B,B,F) IS NONDET
+	(B,F,F) IS NONDET
+	(F,B,F) IS NONDET
+END
+pasteSnippet("writes(?Block,?Field,?Loc)", "?Block writes ?Field at source location ?Loc"). 
+
+// Removed this and replaced it with params (see just below here)
+//param :: Callable, Type, Integer
+//PERSISTENT MODES
+//	(F,F,F) IS NONDET
+//	(B,B,F) IS NONDET
+//	(B,F,F) IS NONDET
+//	(F,B,F) IS NONDET
+//END
+//pasteSnippet("param(?C,?T,?N)", "Callable ?C has an argument of type ?T at position ?N"). 
+
+params :: Callable, [Type]
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,B) IS NONDET
+	(B,F) IS NONDET
+	(F,B) IS NONDET
+END
+pasteSnippet("params(?C,?Ts)", "Callable ?C has an argument list of types ?Ts"). 
+
+tag :: Element, String, String
+PERSISTENT MODES
+	(F,F,F) IS NONDET
+	(B,B,F) IS NONDET
+	(B,F,F) IS NONDET
+	(F,B,B) IS NONDET
+	(F,B,F)	IS NONDET
+END
+pasteSnippet("tag(?Element,?Name,?Value)", "?Element has Javadoc tag ?Name with ?Value"). 
+
+annotation :: Annotation
+PERSISTENT MODES
+	(F) IS NONDET
+END
+pasteSnippet("annotation(?Annot)", "?Annot is an annotation"). 
+
+hasAnnotation :: Element, Annotation
+PERSISTENT MODES
+	(F,F) IS NONDET
+	(B,B) IS SEMIDET
+	(B,F) IS NONDET
+	(F,B) IS NONDET
+END
+pasteSnippet("hasAnnotation(?Element,?Annot)", "?Annot is an annotation on ?Element"). 
+
+attributeSpecified :: Annotation, String, Object
+PERSISTENT MODES
+	(F,F,F) IS NONDET
+	(B,B,F) IS NONDET
+	(B,F,F) IS NONDET
+	(F,B,B) IS NONDET
+	(F,B,F)	IS NONDET
+END
+pasteSnippet("attributeSpecified(?Annot,?name,?value)", "Annotation ?Annot has attribute ?name with explicitly specified (not default) value ?value"). 
+
+//#include "example/predicates.rub"

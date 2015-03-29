@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         id="ca.ubc.jquery.backend.api.gluelog"
+         name="GlueLog backend"
+         point="ca.ubc.jquery.backend.factbase">
+      <API
+            JQueryAPI="ca.ubc.jquery.api.gluelog.JQueryGlueLogAPI">
+      </API>
+   </extension>
+
+<!--   
+	<extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="ca.ubc.jquery.preferences"
+            class="ca.ubc.jquery.jtransformer.JTransformerPreferencePage"
+            id="ca.ubc.jquery.preferences.JTransformer"
+            name="JQuery JTransformer Backend"/>
+   </extension>
+-->
+
+</plugin>

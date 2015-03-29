@@ -1,0 +1,209 @@
+//
+// Support for browsing SliceJ feature annotations.
+//
+
+// For now we just put everything in one file but we may decide later
+// to split this up in a similar way to the standard JQuery menus 
+// and predicates.
+//
+// This builds on Java 1.5 annotation support in JQuery
+
+
+/////// Feature Predicates ////////////////
+
+feature :: String, Element
+MODES 
+   (F,F) IS NONDET
+END
+
+featureMarked :: String, Element 
+MODES 
+   (F,F) IS NONDET
+END
+
+featureImplied :: String, Element 
+MODES 
+   (F,F) IS NONDET
+END
+
+featureMarked(?F,?CodeElement) :- 
+	hasAnnotation(?CodeElement,?A),name(?A,Feature),attribute(?A,names,?F),String(?F).
+
+featureImplied(?F,?E) :- 
+	featureMarked(?F,?E).
+featureImplied(?F,?E) :- 
+	featureImplied(?F,?P),child(?P,?E), NOT(Marker(?E)).
+	
+feature(?F,?E) :- 
+	featureImplied(?F,?E).
+feature(?F,?E) :- 
+	(method(?E);field(?E);constructor(?E)),
+    NOT(featureImplied(?,?E)),equals(?F,"NONE").
+
+pasteSnippet("feature(?F,?CodeElement)","?CodeElement belongs to feature ?F").
+	
+feature :: String
+MODES (F) IS NONDET END
+
+feature(?F) :- feature(?F,?).
+
+pasteSnippet("feature(?F)","?F is the name of a feature occurring in the codebase").
+
+///// Export predicates //////
+
+exportMarked :: Element, String
+MODES 
+  (F,F) IS NONDET
+END
+
+exportImplied :: Element, String
+MODES 
+  (F,F) IS NONDET
+END
+
+export :: Element, String
+MODES 
+  (F,F) IS NONDET
+END
+
+exportMarked(?CodeElement, ?To) :-
+	hasAnnotation(?CodeElement,?A),name(?A,Export),attribute(?A,to,?To),String(?To).
+exportMarked(?CodeElement, ?To) :-
+	hasAnnotation(?CodeElement,?A),name(?A,Export),NOT(attribute(?A,?,?)),feature(?To).
+
+exportImplied(?E,?To) :- exportMarked(?E,?To).
+exportImplied(?E,?To) :- exportImplied(?P,?To), child(?P,?E).
+
+export(?E,?To) :- exportImplied(?E,?To).
+
+pasteSnippet("export(?CodeElement,?To)","The signature of ?CodeElement is exported to feature ?To").
+
+neededExport :: Element, String, SourceLocation
+MODES 
+	(B,F,F) IS NONDET
+	(F,B,F) IS NONDET  
+END
+
+depends :: Element, Element, SourceLocation
+MODES (B,F,F) IS NONDET
+      (F,B,F) IS NONDET
+END
+
+depends(?X,?Y,?Loc) :- 
+	calls(?X,?Y,?Loc);
+	accesses(?X,?Y,?Loc);
+	overrides(?X,?Y),sourceLocation(?X,?Loc).
+
+neededExport(?E,?Target,?Loc) :- export(?E,?Target),
+	// exporting to one's self is not needed: 
+	NOT(feature(?Target,?E)),
+	// something in target feature should depend on exported element:
+	depends(?x,?E,?Loc), 
+	feature(?Target,?x).
+	
+missingElement :: String, Element, SourceLocation
+MODES
+    (F,F,F) IS NONDET
+    (B,F,F) IS NONDET
+    (F,B,F) IS NONDET
+END 
+
+missingElement(?F,?Missing,?Loc) :-
+	feature(?F,?E),
+	depends(?E,?Missing,?Loc),
+	NOT( feature(?F,?Missing);export(?Missing,?F) ).
+	
+certainMissingElement :: String, Element, SourceLocation
+MODES // Same as missingElement, but disregard dependencies from "fuzzy"
+      // methodbody atoms
+    (F,F,F) IS NONDET
+    (B,F,F) IS NONDET
+    (F,B,F) IS NONDET
+END 
+
+certainFeature :: String, Element
+MODES // Same as feature but disregard "fuzzy" methods and constructors. 
+  (F,F) IS NONDET 
+END
+
+certainMissingElement(?F,?Missing,?Loc) :-
+	certainFeature(?F,?E),
+	depends(?E,?Missing,?Loc),
+	NOT( feature(?F,?Missing);export(?Missing,?F) ).
+	
+certainFeature(?F,?E) :- feature(?F,?E),
+	NOT( EXISTS ?G : (method(?E);constructor(?E)), 
+	     feature(?G,?E), NOT( equals(?G,?F) ) 
+	).
+	
+/////// Utility predicates ////////
+
+Annotable :: Element
+Annotable(?E) :- Callable(?E);Field(?E);RefType(?E).
+
+annotable :: Element
+MODES (F) IS NONDET END
+annotable(?E) :- method(?E);constructor(?E);type(?E).
+
+/////// Toplevel menus ////////////
+
+topQuery(["Features"],"feature(?F)",["?F"]).
+
+topQuery(["Feature","Redundant Feature Annot"],
+		"featureMarked(?F,?E),child(?P,?E),featureImplied(?F,?P),simplePathTo(?P,?Pth)",
+		["?Pth","?E"]).
+topQuery(["Feature","Redundant Export Annot"],
+		"exportMarked(?E,?F),child(?P,?E),exportImplied(?P,?F),simplePathTo(?P,?Pth)",
+		["?Pth","?E"]).
+
+/////// Sub menus /////////////////
+
+menuItem(?this,["Missing Elements"],"missingElement(!this,?E,?Loc),simplePathTo(?E,?P)", ["?P","?Loc"]) :-
+    feature(?this).
+
+menuItem(?this,["Contents"],"feature(!this,?E),simplePathTo(?E,?P)", ["?P"]) :-
+    feature(?this).
+
+menuItem(?this,["Exports"],"feature(!this,?E),export(?E,?to),simplePathTo(?E,?P)", ["?P","?to"]) :-
+    feature(?this).
+    
+menuItem(?this,["Unneeded Exports"],"feature(!this,?E),export(?E,?to),NOT(neededExport(?E,?to,?)),simplePathTo(?E,?P)", ["?P","?to"]) :-
+    feature(?this).
+
+//menuItem(?this,[{Exports to ?to}],{feature(!this,??E),export(??E,"?to"),simplePathTo(??E,??P)}, ["?P"]) :-
+//    feature(?this,?E),export(?E,?to).
+    
+menuItem(?this,["Imports"],"export(?E,!this),simplePathTo(?E,?P)", ["?P"]) :-
+    feature(?this).
+    
+menuItem(?this,["Needed Imports"],"export(?E,!this),neededExport(?E,!this,?Loc),simplePathTo(?E,?P)", 
+    ["?P","?Loc"]) 
+:- feature(?this).
+
+menuItem(?this,["Unneeded Imports"],"export(?E,!this),NOT(neededExport(?E,!this,?)),simplePathTo(?E,?P)", 
+    ["?P"]) 
+:- feature(?this).
+    
+menuItem(?this,["Missing Exports"],"missingElement(?F,?E,?Loc),feature(!this,?E),simplePathTo(?E,?P)", 
+    ["?F","?P"]) 
+:- feature(?this).
+
+
+/////// Icons /////////////////////
+
+baseImage(?X,"Feature.gif") :- feature(?X).
+
+////// Feature "Errors" //////////
+
+featureError :: String, String, Element, [Object]
+MODES (B,F,F,F) IS NONDET END
+
+featureError(?F, "Missing element", ?missing, [?loc]) :-
+   feature(?F,?E), depends(?E,?missing,?loc), // Some ?missing element that ?F is using
+   NOT(feature(?F,?missing);export(?missing,?F)). // is neither part of ?F nor exported to ?F
+
+featureError(?F, "Missing export", ?used, [?U,?user,?loc]) :-
+   depends(?user,?used,?loc), feature(?F,?used), // some element ?user is using my element ?used
+   NOT(feature(?F,?user)), // the ?user is outside of the current feature
+   feature(?U,?user),NOT(export(?used,?U)).  // and the ?Element is not exported to the the ?user's feature
+

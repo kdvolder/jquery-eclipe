@@ -1,0 +1,29 @@
+//
+// todo.rub
+//
+
+// This contains a number of project specific todo rules.
+// The todo rules can be queried by JQuery to signal the user
+// of a number of broken design rules.
+
+todo :: Element,           String,           String
+//      for what element   Category of todo  Explanation
+MODES (F,F,F) IS NONDET END
+
+todo(?T,"implement toString",
+ "It is recommended that all concrete classes implement a toString method to ease debugging.")
+// How is this detected: concrete classes should not inherit toString
+// from Object.
+:-  name(?Object,Object),
+    class(?T),package(?T,?scope),re_name(?scope,/^tyRuBa/),
+    NOT(modifier(?T,abstract)),
+    NOT(tag(?T,noToString,?)),
+    inheritedMethod(?T,?toString,?Object),name(?toString,toString).
+
+//
+// Provide a meny to create a 'todo' browser.
+//
+
+topQuery("Todo Rules",
+   "todo(?X,?label,?explanation), pathTo(?X,?P)",
+   ["?label","?P"]).

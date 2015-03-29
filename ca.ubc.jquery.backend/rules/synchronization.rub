@@ -1,0 +1,165 @@
+// TODO: This file doesn't seem to be used by anything any more...
+
+// The configuration interface used to be defined/described in
+// the file "user_config.rub".
+
+// --------------------------------------------------------------------
+// The new form for syn_check is as follows:
+//
+//    syn_check(?this, labelString, queryString, varsString) :- applicabilityExp).
+// --------------------------------------------------------------------
+
+// --------------------------------------------------------------------
+// Type/Type
+// --------------------------------------------------------------------
+
+// (1) B is a superclass of A
+syn_check(?this, "SubClass", "extends(?S,?this),class(?S)", "?S") :-
+    class(?this).
+    
+// (2) B is a subclass of A    
+syn_check(?this, "SuperClass", "extends(?this,?S),class(?S)", "?S") :-
+	class(?this).    
+	
+// (3) B contains A
+syn_check(?this, "Contains", "child(?this,?S),class(?S)", "?S") :-
+	class(?this).
+	
+// (4) A contains B
+syn_check(?this, "Is Contained In", "child(?S,?this),class(?S)", "?S") :-
+	class(?this).	
+
+// --------------------------------------------------------------------
+// Type/Method
+// --------------------------------------------------------------------
+
+// 1)	B creates an object of type A
+syn_check(?this, "Is Constructor Of", "constructor(?Cted,?this)", "?Cted") :-
+    constructor(?this).
+    
+//  2)	B is contained in A  
+syn_check(?this, "Is Contained In", "child(?P,?this),class(?P)", "?P") :-
+	method(?this).    
+	
+// 3)	B has an argument of type A
+syn_check(?this, "Arguments", "arg(?this, ?ArgType),class(?ArgType)", "?ArgType") :-
+	method(?this).
+	
+// 4)	B returns an object of type A
+syn_check(?this, "Returns", "returns(?this, ?RType),class(?RType)", "?RType") :-
+	method(?this).
+	
+// --------------------------------------------------------------------
+// Type/Field
+// --------------------------------------------------------------------
+
+// 1)	B is contained in A
+syn_check(?this, "Is Contained In", "child(?P,?this),class(?P)", "?P") :-
+    field(?this).
+    
+// 2)	B is of type A 
+syn_check(?this, "Type of Field", "type(?this, ?T)", "?T") :-
+	field(?this). 	
+	
+// --------------------------------------------------------------------
+// Method/Type
+// --------------------------------------------------------------------
+
+// 1)	B is created by A
+syn_check(?this, "Constructor", "constructor(?this,?CtorM)", "?CtorM") :-
+    class(?this).
+    
+// 2)	B contains A
+syn_check(?this, "Contains", "child(?this,?C),method(?C)", "?C") :-
+	class(?this). 
+	  			
+// 3)	A has an argument of type B
+syn_check(?this, "Is Argument Type Of", "arg(?M, ?this),method(?M)", "?M") :-
+	class(?this). 	
+	  			
+// 4)	B is returned by A
+syn_check(?this, "Returned By", "returns(?M, ?this),method(?M)", "?M") :-
+	class(?this). 		  			
+	  			
+// --------------------------------------------------------------------
+// Method/Method
+// --------------------------------------------------------------------
+
+//1)	B is called by A
+syn_check(?this, "Incoming Call", "(equals(?this,?target); overrides(?target,?this)),polyCalls(?M2, ?target, ?Ref),child(?C2,?M2)", "?M2") :-
+    method(?this).
+    
+//2)	B calls A
+syn_check(?this, "Outgoing Call", "calls(?this, ?M2, ?Ref), child(?C,?M2)", "?M2") :-
+	method(?this). 
+	  			
+//3)	A reads a field that B writes
+syn_check(?this, "Writes a field that is read by", "writes(?this,?f,?Loc),reads(?M2,?f,?Loc2),method(?M2)", "?M2") :-
+	method(?this). 	
+	  			
+//4)	B reads a field that A writes
+syn_check(?this, "Reads a field that is written by", "reads(?this,?f,?Loc),writes(?M2,?f,?Loc2),method(?M2)", "?M2") :-
+	method(?this). 				
+				  	
+//5)	A and B refer to the same field
+syn_check(?this, "Refer to the same field as", "accesses(?this,?f,?Loc),accesses(?M2,?f,?Loc2),method(?M2)", "?M2") :-
+	method(?this). 		  			
+
+// --------------------------------------------------------------------
+// Method/Field
+// --------------------------------------------------------------------
+
+//1)	B is read by
+syn_check(?this, "Is Read By", "reads(?X,?this,?Loc),method(?X)", "?X") :-
+    field(?this).
+    
+// 2)	B is written by A
+syn_check(?this, "Is Written By", "writes(?X,?this,?Loc),method(?X)", "?X") :-
+	field(?this).
+
+// --------------------------------------------------------------------
+// Field/Type
+// --------------------------------------------------------------------
+
+// (1) B contains A
+syn_check(?this, "Field", "child(?this,?S),field(?S)", "?S") :-
+    class(?this).
+    
+// (2) A is of type B
+syn_check(?this, "Is Type Of", "type(?S, ?this),field(?S)", "?S") :-
+	class(?this).	
+	  			
+	  
+// --------------------------------------------------------------------
+// Field/Method
+// --------------------------------------------------------------------
+
+ // 1)	B writes A
+syn_check(?this, "Writes", "writes(?this,?f,?Loc),child(?C,?this),child(?C,?f),class(?C),field(?f)", "?f") :-
+    method(?this).
+    
+// 2)	B reads A
+syn_check(?this, "Reads", "reads(?this,?f,?Loc),child(?C,?this),child(?C,?f),class(?C),field(?f)", "?f") :-
+	method(?this).		  		
+
+// --------------------------------------------------------------------
+// Field/Field
+// --------------------------------------------------------------------
+
+// 1)	A and B are in the same class
+syn_check(?this, "Same Class As", "child(?C,?this),child(?C,?f),class(?C),field(?f)", "?f") :-
+    field(?this).	  			
+    
+// --------------------------------------------------------------------
+// Interface/Field
+// --------------------------------------------------------------------
+
+// 1)	the field is contained in an interface
+syn_check(?this, "Is Contained In", "interface(?I),child(?I,?this)", "?I") :-
+    field(?this).   
+  	  				
+	  		  		  	  		
+						
+	  			
+			
+	 

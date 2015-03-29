@@ -1,0 +1,74 @@
+// =============================================================
+//
+// Eclipse PDE Stuff
+//
+// =============================================================
+
+// PDE Predicates
+extension :: Integer
+MODES
+	(B) IS SEMIDET
+	(F) IS NONDET
+END
+
+extensionPoint :: Integer
+MODES
+	(B) IS SEMIDET
+	(F) IS NONDET
+END
+
+plugin :: Integer
+MODES (B) IS DET END
+extensionPoints :: Integer
+MODES (F) IS NONDET END
+extensions :: Integer
+MODES (F) IS NONDET END
+
+// PDE Rules
+extension(?X) :- xmlNode(?X,?t),equals(?t,"extension").
+extensionPoint(?X) :- xmlNode(?X,?t),equals(?t,"extension-point").
+
+extensionPoints(-1).
+extensions(-2).
+
+plugin(?X) :- xmlNode(?X,?t),equals(?t,"plugin").
+
+//=============================================================
+//
+// Ant Build Stuff
+//
+// =============================================================//
+antProject :: Integer
+MODES (F) IS NONDET END
+antProperty :: Integer
+MODES (F) IS NONDET END
+antTarget :: Integer
+MODES (F) IS NONDET END
+antTargetProperty :: Integer
+MODES (F) IS NONDET END
+antInit :: Integer
+MODES (F) IS NONDET END
+antPath :: Integer
+MODES (F) IS NONDET END
+
+antTopLevel :: Integer
+MODES (F) IS NONDET END
+antChild :: Object, [Integer]
+MODES 
+	(F,F) IS NONDET
+	(B,F) IS NONDET
+END
+
+antProject(?X) :- xmlNode(?X,?t),equals(?t,"project").
+antProperty(?X) :- xmlNode(?X,?t),equals(?t,"property").
+antInit(?X) :- xmlNode(?X,?t),equals(?t,"target"),xchild(?X,?x),xmlAttribute(?x,"name",?z),label(?z,"init").
+antTarget(?X) :- xmlNode(?X,?t),equals(?t,"target").
+antPath(?X) :- xchild(?P,?X),antProject(?P),xmlNode(?X,?t),equals(?t,"path").
+antTargetProperty(?X) :- xmlNode(?X,?t),xchild(?Y,?X),antTopLevel(?Y).
+antTargetProperty(?X) :- xmlNode(?X,?t),xchild(?Y,?X),antTargetProperty(?Y).
+
+antTopLevel(?X) :- antInit(?X);antTarget(?X);antPath(?X);antProperty(?X).
+
+antChild(?X,[?Y|?R]) :- xmlNode(?X,?),xchild(?X,?Y),antChild(?Y,?R).
+antChild(?X,[]) :- antTargetProperty(?X).
+antChild(?X,[]) :- antTopLevel(?X).

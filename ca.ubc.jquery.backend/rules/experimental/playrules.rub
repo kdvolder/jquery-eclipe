@@ -1,0 +1,40 @@
+//
+// Playrules.rub
+//
+//
+//  Just some fun rules to play around with...
+
+////////////////////////////////////////////////////////////////
+cflowbelow :: Block, Callable
+MODES 
+    (F,F) IS NONDET
+END
+
+/* very crude version of "cflowbelow" */
+
+cflowbelow(?m1,?m2) :- polyCalls(?m1,?m2,?).
+cflowbelow(?m1,?mX) :- cflowbelow(?m1,?m2), polyCalls(?m2,?mX,?).
+
+pasteSnippet("cflowbelow(?caller,?called)",
+             "?caller recursively calls ?called.").	
+
+////////////////////////////////////////////////////////////////
+fullyStaticClass :: RefType
+MODES 
+    (F) IS NONDET 
+END
+
+fullyStaticClass(?C) :- 
+     class(?C), 
+     NOT (
+        EXISTS ?m : (hasField(?C,?m,?);hasMethod(?C,?m,?)), 
+                    NOT( modifier(?m,static) )
+     ).
+     
+pasteSnippet("fullyStaticClass(?Type)",
+             "?Type is a class that only possesses static members.").
+             
+rawString :: Object, String
+MODES (B,F) IS DET END
+rawString(?Obj,{?Obj}).
+     

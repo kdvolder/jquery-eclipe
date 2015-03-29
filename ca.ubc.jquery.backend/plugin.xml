@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="factbase" name="JQuery Factbase" schema="schema/factbase.exsd"/>
+   <extension-point id="resource" name="JQuery Resource Strategy" schema="schema/resource.exsd"/>
+   <extension-point id="javaVisitor" name="JQuery Java AST Visitor" schema="schema/javaVisitor.exsd"/>
+   <extension-point id="includeRules" name="JQuery rules to include" schema="schema/includeRules.exsd"/>
+   <extension-point id="predicates" name="JQuery predicates to include" schema="schema/predicates.exsd"/>
+
+     <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="JQuery"
+            id="ca.ubc.jquery">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+      </perspectiveExtension>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+   	  <page
+            category="ca.ubc.jquery.preferences"
+            class="ca.ubc.jquery.preferences.JQueryTyrubaPreferencePage"
+            id="ca.ubc.jquery.preferences.tyruba.JQueryPreferencePage"
+            name="JQuery Tyruba Backend">
+      </page>
+      <page
+            class="ca.ubc.jquery.preferences.JQueryBackendPreferences"
+            id="ca.ubc.jquery.preferences"
+            name="JQuery"/>
+   </extension>
+   <extension
+         id="ca.ubc.jquery.backend.api.tyruba"
+         name="Tyruba backend"
+         point="ca.ubc.jquery.backend.factbase">
+      <API
+            JQueryAPI="ca.ubc.jquery.api.tyruba.JQueryTyRuBaAPI">
+      </API>
+   </extension>
+   
+/<!--  
+   <extension
+         id="ca.ubc.jquery.resource.javafiles"
+         name="JavaFiles"
+         point="ca.ubc.jquery.backend.resource">
+      <Resource
+            JQueryResource="ca.ubc.jquery.engine.tyruba.java.JavaFileStrategy">
+      </Resource>
+      <Definition
+            File="rules/initfile.rub">
+      </Definition>
+   </extension>
+   <extension
+         id="ca.ubc.jquery.resource.classfiles"
+         name="ClassFiles"
+         point="ca.ubc.jquery.backend.resource">
+      <Resource
+            JQueryResource="ca.ubc.jquery.engine.tyruba.java.ClassFileStrategy">
+      </Resource>
+      <Definition
+            File="rules/initfile.rub">
+      </Definition>
+   </extension>
+-->   
+   
+   <extension
+         id="ca.ubc.jquery.resource.java"
+         name="Java Facts"
+         point="ca.ubc.jquery.backend.resource">
+      <Resource
+            JQueryResource="ca.ubc.jquery.resource.java.tyruba.JavaFileStrategy">
+      </Resource>
+      <Definition
+            File="rules/initfile.rub">
+      </Definition>
+   </extension>
+   <extension
+         id="ca.ubc.jquery.resource.class"
+         name="Class Facts"
+         point="ca.ubc.jquery.backend.resource">
+      <Resource
+            JQueryResource="ca.ubc.jquery.resource.java.tyruba.ClassFileStrategy">
+      </Resource>
+      <Definition
+            File="rules/initfile.rub">
+      </Definition>
+   </extension>
+   
+   <!--
+   Not used right now as it was not reliable...
+   <extension
+         id="ca.ubc.jquery.backend.api.tyruba.bdb"
+         name="Tyruba Backend (with berkely persistence strategy)"
+         point="ca.ubc.jquery.backend.factbase">
+      <API
+            JQueryAPI="ca.ubc.jquery.api.tyruba.TyRuBaBDB">
+      </API>
+   </extension>
+   -->
+   <extension
+         name="Create JQuery Working Set Action"
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="ca.ubc.jquery.browser.createWorkingSet"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="ca.ubc.jquery.actions.CreateWorkingSet"
+               id="ca.ubc.jquery.action.createWorkingSet"
+               label="Add to JQuery factbase">
+         </action>
+      </objectContribution>
+   </extension>
+
+
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="ca.ubc.jquery.scapes.JQueryScapesPerspectiveFactory"
+            fixed="false"
+            icon="icons/QueryView.gif"
+            id="ca.ubc.jquery.scapes.perspectives"
+            name="JQueryScape">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="ca.ubc.jquery.scapes.SaveJQueryScapeHandler"
+            commandId="ca.ubc.jquery.scapes.commands.savescape">
+      </handler>
+      <handler
+            class="ca.ubc.jquery.scapes.RestoreJQueryScapeHandler"
+            commandId="ca.ubc.jquery.scapes.commands.restorescape">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="ca.ubc.jquery.scapes.toolbar">
+            <command
+                  commandId="ca.ubc.jquery.scapes.commands.savescape"
+                  icon="icons/QueryView.gif"
+                  label="Save JQueryScape As..."
+                  tooltip="Save the current JQueryScape to a file">
+            </command>
+            <command
+                  commandId="ca.ubc.jquery.scapes.commands.restorescape"
+                  icon="icons/ResultsView.gif"
+                  label="Restore JQueryScape"
+                  tooltip="Load a JQueryScape from a file">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="ca.ubc.jquery.scapes.commands.category"
+            id="ca.ubc.jquery.scapes.commands.savescape"
+            name="Save JQueryScape">
+      </command>
+      <command
+            categoryId="ca.ubc.jquery.scapes.commands.category"
+            id="ca.ubc.jquery.scapes.commands.restorescape"
+            name="Restore JQueryScape">
+      </command>
+      <category
+            description="Commands related to saving and restoring JQueryScapes"
+            id="ca.ubc.jquery.scapes.commands.category"
+            name="JQueryScapes Category">
+      </category>
+   </extension>
+   
+</plugin>

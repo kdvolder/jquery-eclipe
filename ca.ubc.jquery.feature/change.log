@@ -1,0 +1,423 @@
+[:] - keep my eyes on it for later... (potential bug)
+[+] new feature
+[-] fix
+- information
+
+==========
+7/25/2008
+==========
+	[-] fix when changing resources caused view linking to be messed up
+	[+] changed constructor names from <init> to actual class names (more like Eclipse)
+	[+] improved API fact generator class 
+	[+] refactoring rules files to make management more clear and make a distinction between
+		normal Java predicates and language independent predicates
+	[+] disabled regular expression filter display by default
+	[+] made smaller factbase the standard
+	[+] added an "Open with JQuery" button to most Eclipse context menus (works great!)
+
+==========
+7/15/2008
+==========
+	[-] fix concurrent modification exception when updating resource strategies
+	[+] removed fourth parameter from file locations (not needed after a small tyruba mode definition change)
+	[+] added a fact generator which uses string integers instead of long strings for identifiers.  
+		WAY MORE EFFICIENT DATABASE! 
+	[-] bug fix which prevented linking to be restored properly for an XML defined view
+
+==========
+7/10/2008
+==========
+	[+] added JQuery Browser to Show In view menus
+	[+] added getIdentityQuery method to API (essentially just an equals(!this,?T) query)
+	[+] fixed Save/Restore JQueryScape
+	[+] added JQuery syntax highlighting
+		- basically there are rules to define Eclipse pattern matches
+		- the matches get coloured based on information loaded from tyruba facts
+		- definitely more work to be done here
+				- improve colouring so it supports JavaDoc style colouring inside colouring
+				- improve design so I'm not relying entirely on partitions
+	[-] fix preferences for auto-complete help and now it actually works!
+	[+] added a slightly more obvious error message to popup query edit dialog
+	[+] added error message to regular expression filter box
+	[+] added support for hiding regular expression box (maybe it should be hidden by default?)
+	[+] improved save state by moving more things into XML file instead of raw data files
+	[-] bug which caused views to appear linked even when they had no targets
+
+==========
+5/28/2008
+==========
+	[-] fix queries not being updated when an error occurs during editing
+		- it was always a little annoying when you work hard on a query, click Apply and then
+		lose your changes.  This is now fixed.
+	[+] added an option to the tree browser preferences to disable auto-complete for query editing
+	[+] added menu item to count query results
+	[-] bug where node results weren't counted properly
+
+==========
+4/14/2008
+==========
+	[-] made query node refresh children even when the query is cancelled
+	[-] bug fixes to query result counter
+	[+] added preference page for UI infor
+	[-] removed useless "max results" from tyruba backend preference page 
+	- forced tree builder to display an error when number of query results exceded the limit
+		(it was only tracing this case before)
+	- improved SelectionHandler so it would generate JQuery selections from .xml files
+	- initial release of JQuery XML Resource plugin onto the CVS
+	[+] improvements to JavaDoc parsing for handling regular expressions
+	[-] removed dependencies on internal RE for regular expressions, instead using Pattern
+	[-] fix when using "Add to JQuery factbase" for projects containing files with no extension
+	[-] unselecting resources in the preferences did not uninstall the resource
+	[-] bug fix which caused the API to be reloaded each time you apply preferences
+	[-] bug fix to OK button on Backend preferences
+	[+] extended resource strategy so now it can load images from resource plugins
+		- improvements to the API
+	[+] improved XML handling so it mostly opens the location from the file or
+		it will display a dialog with a reason why it can't.
+	[-] bug which stopped queries from being refreshed when recursive checkbox changed
+	[-] bug where visible values for recursive nodes were not correct
+
+==========
+04/07/2008
+==========
+	- finished XML parser although sourceLocation is kind of hacky...
+	- XML parser doesn't open plugin files properly because I cannot set the selected position
+		easily from within a ManifestEditor which is what Eclipse opens.  If it only opened
+		a standard editor I'd be all set.
+	[+] improved WorkingSetFactBase workingSet management
+	[-] bug fix in JQueryFileElement#toString()
+	[+] generalization of API JQueryFactGenerator#insertSourceLocation() method
+		- now insert objects as the element instead of strings because Tyruba does
+		not handle this properly
+	- more code improvements
+	[-] bug fix to XML defined views so they do not display an error when restoring the
+		perspective
+	[+] added autoactivation keys to editor content proposer (much easier to use now!)
+	[-] bug fix for scheduling rule (should not cause an error now...)
+	[+] initial support for an XML parser (just need source location information)
+
+==========
+03/25/2008
+==========
+	[-] bug fix for occasional query node name updates not canceling 
+	[-] bug fixes to quick view so selection now works when it opens
+	- lots of code improvements and documentation
+	- preperation for code release
+	- package adjustments
+
+==========
+03/17/2008
+==========
+	[+] improved new query dialogs
+	[-] bug fix which prevented feature browsing (another error in TyrubaQuery.bindVariables()
+	[-] more bug fixes/improvements to working set management
+	[-] bug fixes for "Add to JQuery factbase" button (in Tyruba)
+	- optimizations for "Add to JQuery factbase" button (in Tyruba)  
+	- stopped API from writing list of update targets... not sure if this is good or not
+	[+] added save JQueryScape / restore JQueryScape toolbar actions 
+		- diabled both because I can't yet get restore working properly
+	[+] enabled JQueryTreeView saving to IMemento objects (and various other JQuery objects)
+	- some code cleanup
+	[+] disabled history from JQueryTreeView <- I think this feature may never be ready
+		for public release and probably should be removed.  A better way may be to use
+		the Eclipse undo actions
+	[-] bug fix which prevented Tyruba backend from properly detecting changes to objects
+	[-] rearrange the updateRuleBaseManager() calls.
+		[:] there is something funky going on here... occasionally it'll do an update but
+			only one file when it really should be several.  It's like it'll get 
+			interrupted and then never resume...
+	
+
+==========
+03/13/2008
+==========
+	[-] bug fixes to help Tyruba users manage !this var (it wasn't working properly)
+		- led to several changes really but it should be fixed completely now
+	- changes to add project to Tyruba working set but it won't update properly
+		- this appears to be Eclipse by default has updaters for Java stuff (packages/files)
+		but it won't work for things that aren't Java and I can't even get it to work for
+		things that are Java but are not set using the UI.  Ugh...
+		- I guess a solution here may just be to create a new working set but I'm not that
+		convinced even that will work.  The documentation on creating your own working set
+		types is pretty scarce right now and there is very little work done in that 
+		direction and I'm not, at this stage, eager to be forging new ground.
+	[:] add working set works, but it's sketchy at times
+		- if you don't make changes and don't add files, it should be sufficient.  If you
+		force refresh it'll work no matter how many files you add.  It won't auto update
+		like it should though.  I'd expect this to have bug reports later.
+
+==========
+03/05/2008
+==========
+	[-] bug fixes to annotation parsing which caused a thread to crash in Tyruba (BAD!!)
+	[-] fixed a bug binding variables in Tyruba which caused problems in Java 1.5
+	[+] JQuery is now Java 1.5 compliant !!
+	[-] fixes and improvements to "Add to JQuery factbase" menu option 
+		(it's almost 100% now)
+	[+] improved synchronization of working sets and auto updates
+	[+] more improvements to working set updates 
+
+==========
+02/27/2008
+==========
+	[+] elementary support for enums
+		- updates to fact generator
+		- updates to rules files
+	- change implementation of link browser dialog so now we can use either the popup or 
+		the regular dialog with ease
+	[+] regular expression filter added to link browser dialog
+	[-] bug fix where editor selection throws an exception when shutdown before used
+	[-] updates to JQueryBackend Extension definition (due to earlier changes in the API)
+
+==========
+02/12/2008
+==========
+	[-] fix update targets leaving ... at the end of browsers and queries
+	[-] fix superfluous update targets being generated
+	- refactored updateTarget management in JQueryTreeView so that no accesses occur 
+		outside of the getter method
+	[+] added simple support for better text completion when editing queries
+	- more progress refactoring query edit dialogs, basic support well in place.  
+		Need UI tweaks.
+	[-] fix query ... updates so they work better
+	[-] fix view names getting messed up after repeatedly running queries (extra ...'s)
+
+==========
+02/05/2008
+==========
+	[-] fix regexp filtered recursive queries (broke it a few weeks ago)
+	- updates outgoing calls query to handle classes
+	- same for incoming calls query
+	[-] bug which cases node element sources not to be updated when the query is refreshed
+			- this caused bugs when applying filters (because it was applied to a variable
+				that didn't exist if the query had been changed)
+	[-] fix content provider to properly handle recursive queries (specifically
+		hasChildren now works proplery)
+		- aligned reg exp view filter to work with the new content provider
+
+
+==========
+01/30/2008
+==========
+	[-] fixed a bug which prevented propery display of !this when bound to a list
+	- disable input and output variables having the same names in tyruba queries
+		(for instance: having variables !this and ?this is not allowed)
+	[-] fixed XML views from erasing state from other views
+	[+] fixes for add to JQuery factbase action
+		- adds folders of items so that workingset changes are recorded properly
+		- added feature so that when I add to factbase it adds the new ws to the current ws
+		- moved this code to the API so that I can implement it in JTransformer too (not done)
+	[-] stop refresh button from appearing on non-query rooted views
+	[-] fixed a bug which was preventing xml views from being linked properly
+	[-] fixed concurrent modification when flushing the cache of the label provider
+
+==========
+01/25/2008
+==========
+	[+] implemented a rudementary tree browser on top of this JQueryResultGraph structure
+		- seems to work okay, there is a bug with the way top queries are evaluated
+		- seems that changes in the query are hard to propogate to children
+			- perhaps instead of cloning passing along the query structure to children nodes
+				I can just pass a list of bound variables?
+			- when I need to recurse it's easy to clear that list
+		- refresh doesn't work the way I hoped
+		- all in all it seems okay for a first attempt (the content provider is MUCH simpler
+			and there is no tree builder job although for large queries, it's potentially 
+			quite slow and will block the UI)
+			- UI blocking may be easy to solve with a please wait while loading node
+			- this node will also allow large queries to be displayed incrementally...
+			- maybe overall this is a much better solution
+
+==========
+01/24/2008
+==========
+	[-] fix popup view from showing errors by hiding catching all throwable... not a great 
+		solution but no choice :(
+	- begun work on making a more re-usable edit dialog interface
+	[+] created JQueryResultGraph class (well a few days ago but it's now fully working)
+		[+] allows you to browse results one level at a time
+		[+] apply filters
+		[+] filters work on recursive queries
+		[+] allows infinite recursion
+		- this class (and it's related Node class) are complicated though...
+			the code needs some tweaking
+		- it's likely not as efficient as before but there was simply no way to apply a filter
+			to a recursive query so at least I can address that issue here
+		- all of this makes me think that perhaps the current query interface is not the 
+			best one and this ResultGraph provides a WAY cleaner way of getting at results
+		- now I need to write a some tree classes and test out JQuery to see how it will work
+			- likely this will be major amounts of work (at least a day)
+			- require writing new label provider/content providre
+			- require new tree class (new menu class?)
+			- ugh...
+			- maybe I can just subclass the existing one and replace execute functions?
+			- I guess I'll also have to replace it's content provider/label provider with
+				subclasses of the existing ones as I'm sure code relies on that too...
+
+==========
+01/18/2008
+==========
+	[+] support for saving/restoring created filters
+	[+] support deleting filters
+	[+] filters of the same name are replaced (silently... there should be a dialog or something)
+	[+] added confirmation dialog for the above point
+	[-] fixed JTransformer API so it now allows "" as a query
+	- change filter list implementation from a List to a Map to make code more readable
+
+==========
+01/16/2008
+==========
+	- started a new approach to JQuery filters: generate them in a view, drag and apply
+		to existing queries.  We'll see if this is doable...
+	[+] query creation view
+		- define a query (even bind free variables... not working but it will!)
+		- create query
+		- drag queries onto other views and apply those queries
+	- I hope this feature will allow custom filters to views
+		- drag a query to a toolbar and an icon appears which allows you to apply the filter
+	[+] export/import query nodes
+	[-] bug forced a user to re-execute a query after importing
+	[-] bug when applying multiple filters to a query
+	[-] bug when applying multiple filters to a list
+		[:] this exhibits unusual behaviour, it creates two variables, one for each filter
+			which sometimes returns results we may not expect.  They are logical and 
+			consistent but I'm not sure if it's the right solution 	
+	[+] filters creation view can now bind variables in queries (bind by drag and drop values
+			into the free variables list)
+		- pretty good
+		- major changes to the Query system so maybe I need to test this stuff before making
+			it final
+	- I think I cleaned up some of the API 
+		- no difference handling Object/Object[] for bound query variables
+		- finally be able to remove Object[] handling for Tyruba queries
+		- kind of hacky though, relies heavily on query string manipulation
+	[-] no more need for special handling of Tyruba queries when bound to Object[] vars
+	 
+
+==========
+01/14/2008
+==========
+	- begun initial support for custom filters
+		- this will allow custom filters to be written and applied
+		- it will also permit filters with parameters that can be bound before executing
+			the query
+		- problem having a popup dialog and a regular dialog open at the same time
+		- I think I'll need a different mechanism for binding free variables
+	- I think the resource plugin stuff is probably a mess... maybe it needs to be reworked?
+	- refactored the JQueryTreeView and JQueryTreeViewer classes so they now have a more
+		logical breakdown of work.
+		- JQueryTreeView is a viewPart and so it shouldn't be too concerned with specific
+			tree related functions
+		- JQueryTreeViewer needed more tree functions to be re-used easier
+		- this also allows me to re-use the menu structures much easier although I have yet
+			to really test that it works.  I'm 99% sure it will.
+
+==========
+01/11/2008
+==========
+	- moved create working set function to backend (it really shouldn't be in the front end
+		anyway)
+	- changed regexp filter button to be refresh view (seems to work better this way)
+	- removed toggling of regular expression filter
+
+==========
+01/08/2008
+==========
+	[-] fixed bug which prevented working set changes from being noticed
+	- changed default tyruba backend to file based persistence strategy one
+	[+] added create working set function to make setting up JQuery easier
+
+==========
+01/07/2008
+==========
+	[-] fixed a bug which prevent some eclipse menus from working
+	
+==========
+12/12/2007
+==========
+	- removed IQueryResults (and implementing classes) in favour of a large JQuery class
+		- this should allow filters to be applied to recursive queries
+		- this is a much more direct model representation
+		- required some hacking to get serialization to work
+			- now backend has a class to help load streams of objects which contains 
+				JQuery API objects
+		- changed a whole whack of code to make this work
+	[-] fixed a bug which prevent eclipse menu from working proplery
+	[-] fixed jtransformer so it now can get variables from a query with a strong (this 
+		fix has waited WAY too long)
+	[+] stopped putting NoResultNodes for recursive queries... it seems kind of obvious
+		why there are no children and those nodes get in the way
+
+==========
+12/07/2007
+==========
+	[-] JQuery honours single/double click platform specification
+	[-] java model selection stuff doesn't interfere with normal tree operation
+	[+] popup link browser dialog
+	[+] separate label and image generation/caching threads
+	[-] fixed delete query so it doesn't call TreeViewer#remove(Object) (should only be called
+		by the content provider 
+	[+] query execution progress tracked by query name (animated ...)
+		- also updates view name for query rooted views
+		
+==========
+12/05/2007
+==========
+	[+] background node labeling (now images and labels are processed at once)
+		- results are cached
+		- cache is cleared when the factbase updates
+		- requires additional sorting stage
+	[+] added new backend: tyruba with old file base persistence strategy
+	- optimized label generating process (less redundency)
+
+==========
+12/04/2007
+==========
+	- document started
+	[+] added better link filter feature
+		- updated JQueryUpdateTarget to get filters
+		- made JQueryUpdateTarget abstract
+		- made JTransformer and TyRuBa UpdateTargets
+		- changed createUpdateTarget() to make use of these
+		- added _createUpdateTarget to API
+		- moved editor selection listener from API constructor to create target because
+			of the dependency the API now having be initialized before we can create 
+			targets
+	[+] improved query popup
+		- better tab order
+		- optimized for keyboard usage :)
+				
+==========
+History
+==========
+	[+] JQuery API and separate front and back end of JQuery
+		- now have ca.ubc.jquery.browser and ca.ubc.jquery.backend
+	[+] ca.ubc.jquery.backend.transformer plugin to supply secondary backend
+	[+] mulitple selection in a view
+	[+] query result nodes group together to simplify querying
+	[+] added multiple views
+	[+] query rooted views
+	[+] view linking
+		- view selection linking
+		- editor selection linking 
+	[+] improved query filtering
+		- similar mechanism to query node generation
+		- check and enable type filters
+		- remove filters from query edit dialog
+		- query node name change if a filter is applied
+	[+] drag and drop query targets
+	[+] update targets in API to facilitate linking
+	[+] JQuery -> JavaModel converter in the API
+	[+] JavaModel -> JQuery converter in the API (untested... unused?)
+	[+] regular expression filter for every view
+	[+] load rules files through extension point
+	[+] pluggable fact generators (not well tested, only works for Tyruba)
+	[+] query popup dialog
+		- better error message display
+		- less buttons
+		- cleaner look
+		- feels less abrasive
+	[+] recursive queries
+		- query recurses lazily through the UI
+		- reg exp filter works for this
+	[+] better preservation of node expansion state

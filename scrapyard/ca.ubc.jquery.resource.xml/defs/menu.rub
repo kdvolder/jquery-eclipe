@@ -1,0 +1,37 @@
+topQuery(["XML Files"], "xmlFile(?F,?)",["?F"]).
+
+menuItem(?this, ["Nodes"] , "xchild(!this,?X),xmlNode(?X,?)", ["?X"]) :-
+	xmlFile(?this,?).
+
+menuItem(?this, ["Child"] , "xchild(!this,?X)", ["?X"]) :-
+	(xmlFile(?this,?);xmlNode(?this,?)).
+    
+menuItem(?this, ["Attribute"], "xchild(!this,?X),xmlAttribute(?X,?,?V)",["?X","?V"]) :-
+	xmlNode(?this,?).
+
+menuItem(?this, ["Attribute (with class value)"], 
+	"xchild(!this,?X),xmlAttribute(?X,?,?V),xmlValue(?V,?v),Type(?T),name(?T,?Tn),package(?T,?P),name(?P,?Pn),string_append(?Pn,'.',?PPn),string_append(?PPn,?Tn,?v)", 
+	["?X","?T"]) :-
+			xmlNode(?this,?).
+			
+			
+// =============================================================
+//
+// Eclipse PDE Stuff
+//
+// =============================================================
+menuItem(?this, ["PDE"], 
+		"xchild(!this,?X),((extension(?X),extensions(?Y));(extensionPoint(?X),extensionPoints(?Y)))",
+		["?Y","?X"]) 
+		:- plugin(?this).
+
+
+//=============================================================
+//
+// Ant Build Stuff
+//
+// =============================================================
+menuItem(?this, ["Ant Project"], 
+		"xchild(!this,?X),antTopLevel(?X),antChild(?X,?Y)",
+		["?X","?Y"]) 
+	:- antProject(?this).

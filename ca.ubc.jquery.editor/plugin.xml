@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="JQuery Editor"
+            extensions="rub"
+            icon="icons/QueryView.gif"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="ca.ubc.jquery.editor.JQueryEditor"
+            id="ca.ubc.jquery.editor.JQueryEditor">
+      </editor>
+   </extension>
+   <extension
+         id="ca.ubc.jquery.editor.ui.editor.extension"
+         name="Editor Configuration"
+         point="ca.ubc.jquery.backend.resource">
+      <Definition
+            File="defs/initeditor.rub">
+      </Definition>
+   </extension>
+
+</plugin>

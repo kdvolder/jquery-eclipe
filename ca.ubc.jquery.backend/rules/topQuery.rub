@@ -1,0 +1,89 @@
+//=====================================================================
+// Top Level Queries
+//=====================================================================
+topQuery(["Package Browser (.java files)"],
+		"package(?P),child(?P,?CU),child(?CU,?T),Type(?T),javaFile(?CU)", 
+		["?P", "?T"]).
+
+topQuery(["Package Browser + Outline"],
+		"package(?P),child(?P,?CU),child(?CU,?T),Type(?T),javaFile(?CU),outlineView(?T,?O)", 
+		["?P", "?T", "?O"]).
+				
+topQuery(["~ Unused","Package Browser (.java|.class files)"],
+		"package(?P),child(?P,?CU),child(?CU,?T),Type(?T)", 
+		["?P", "?T"]).
+		
+topQuery(["~ Unused","Class Creation"], 
+		"class(?Cted),package(?Cted,?CtedP),creator(?Cted,?CtorM,?Ref),child(?CtorC,?CtorM),package(?CtorC,?CtorP)",
+		["?CtedP","?Cted", "?CtorP", "?CtorC", "?CtorM" , "?Ref"]).
+
+topQuery(["~ Unused","Interface Implementation"], 
+		"interface(?Itf),hierarchy(?Itf,?H)",
+		["?Itf","?H"]).		
+
+//An alternative interface implementation browser		
+topQuery(["~ Unused","Interface Implementation 2"], 
+		"interface(?Itf),subtype+(?Itf,?Cls),class(?Cls),package(?Cls,?CPkg),package(?Itf,?IPkg)",
+		//{interface(??Itf),subtype+(??Itf,??Cls),class(??Cls),
+		 //package(??Cls,??CPkg),package(??Itf,??IPkg)},
+		["?CPkg", "?Cls", "?Itf"]).
+
+topQuery(["~ Unused","Abstract Classes"], 
+		"class(?Cls),modifier(?Cls,abstract),hierarchy(?Cls,?H)",
+		["?Cls","?H"]).
+		
+topQuery(["~ Unused","InstanceOf testing"],
+		"instanceOf(?tester,?Tested,?Loc),package(?Tested,?P),child(?Ctester,?tester),package(?Ctester,?Ptester)",
+		["?P","?Tested","?Ptester","?Ctester","?tester","?Loc"]).
+
+//Experimental:Structure Browser: Displays the full java structure of the
+//code, including outer and nested (local, anonymous, member, static nested)
+//types as well as fields and methods of each, sorted by child order starting
+//with packages.  
+
+
+topQuery(["~ Unused","Java Structure Browser"],
+		"package(?Pkg), viewFromHere(?Pkg, ?View)", 
+		["?Pkg", "?View"]).
+		
+topQuery(["Method Browser"],
+{method(??M),name(??M,??name),
+child(??C,??M),package(??C,??P)
+},["?P","?name","?C","?M"]).
+//uncomment if you 
+//want to match a regular exp
+//e.g. method names that start with t:
+//,re_match(/^t/,??name)}
+
+topQuery(["~ Unused","Abstract Method Browser"],
+{method(??M),child(??T,??M),(interface(??T);modifier(??M,abstract)),
+ overrides(??SubM,??M),child(??SubC,??SubM)},
+ ["?T","?M","?SubC","?SubM"]).
+ 
+topQuery(["Tags"],
+{tag(??X,??Tag,??Val),pathTo(??X,??path)}, 
+[ "?Tag", "?Val", "?path" ]).
+
+topQuery(["Java 1.5 Annotations"],
+//{hasAnnotation(??X,??Annot),name(??Annot,??TypeName),pathTo(??X,??path)}, 
+//[ "?TypeName", "?path" ]).
+{hasAnnotation(??X,??Annot),annotType(??Annot,??Type),pathTo(??X,??path)}, 
+[ "?Type", "?path" ]).
+
+//Compiler Error and Warning queries
+topQuery(["Compiler Warnings"], "warning(?W),child(?E,?W)",["?W","?E"]).
+topQuery(["Compiler Errors"], "error(?W),child(?E,?W)",["?W","?E"]).
+topQuery(["Bookmarks"],"bookmark(?B)",["?B"]).
+topQuery(["Tasks"],"task(?T),child(?E,?T),priority(?T,?Pr)",["?Pr","?T","?E"]).
+
+topQuery(["~ Unused","JUnit tests"],
+{subtype+(?T,??Test),class(??Test),NOT(modifier(??Test,abstract)),method(??Test,??test),
+re_name(??test,/^test/),package(??Test,??P)},
+	["?P","?Test","?test"])
+:- name(?T,TestCase),Type(?T).
+
+topQuery(["~ Unused","Debug Printing"],{
+   (name(??out,out);name(??out,err)),
+   field(??out),child(??System,??out),name(??System,System),
+   reads(??X,??out,??loc),simplePathTo(??X,??P)},
+   ["?P","?loc"]).

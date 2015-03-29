@@ -1,0 +1,32 @@
+//
+// deprecated.rub
+//
+
+//
+// This file provides a JQuery extension to help you work with deprecated
+// tags on methods fields and classes.
+//
+// Status: provisionary partial implementation. Updated "as we go".
+//
+
+pasteSnippet("deprecated(?Element)","?Element has @deprecated JavaDoc tag"). 
+pasteSnippet("deprecatedComment(?Element,?comment)","?Element has @deprecated JavaDoc tag with comment string ?comment").
+
+deprecated :: Element
+MODES (F) IS NONDET END
+
+deprecated(?E) :- tag(?E,deprecated,?).
+
+
+deprecatedComment :: Element,String
+MODES (F,F) IS NONDET END
+
+deprecatedComment(?E,?comment) :- tag(?E,deprecated,?comment).
+
+topQuery("Deprecated Elements",
+   "deprecatedComment(?E,?comment),pathTo(?E,?Path)",
+   ["?Path","?comment"]).
+   
+topQuery("Deprecated Uses",
+   "deprecatedComment(?E,?comment),polyCalls(?X,?E,?loc),pathTo(?X,?Path)",
+   ["?Path","?loc","?comment"]).

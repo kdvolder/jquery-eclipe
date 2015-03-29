@@ -1,0 +1,14 @@
+newTreeMenu :: Object, [String], String, [String], String, String, String
+MODES 
+	(B,F,F,F,F,F,F) IS NONDET
+END
+
+newTreeMenu(?this,
+		["Outline"],"outlineView(!this,?X)",["?X"],
+		"type(!this)","field(!this);Callable(!this)","2") :-
+	type(?this).
+
+newTreeMenu(?this,
+		?Label,?Query,?Vars,
+		"","","1") :-
+	menuItem(?this,?Label,?Query,?Vars).

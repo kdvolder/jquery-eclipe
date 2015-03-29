@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JQuery Editor Plug-in
+Bundle-SymbolicName: ca.ubc.jquery.editor; singleton:=true
+Bundle-Version: 1.0.2
+Bundle-Vendor: University of British Columbia
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.jface.text,
+ org.eclipse.ui.editors,
+ ca.ubc.jquery.backend;bundle-version="4.0.1",
+ org.eclipse.ui.ide
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

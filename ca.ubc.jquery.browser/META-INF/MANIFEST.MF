@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JQuery Browser Plug-in
+Bundle-SymbolicName: ca.ubc.jquery.browser; singleton:=true
+Bundle-Version: 4.0.3
+Bundle-Activator: ca.ubc.jquery.JQueryTreeBrowserPlugin
+Bundle-Localization: plugin
+Require-Bundle: ca.ubc.jquery.backend,
+ org.eclipse.jdt.ui,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.jdt.core,
+ org.eclipse.jface.text
+Eclipse-LazyStart: true
+Bundle-ClassPath: bin/
+Export-Package: ca.ubc.jquery;x-friends:="ca.ubc.jquery.backend.testing",
+ ca.ubc.jquery.browser,
+ ca.ubc.jquery.browser.actions,
+ ca.ubc.jquery.browser.menu,
+ ca.ubc.jquery.gui,
+ ca.ubc.jquery.gui.commands,
+ ca.ubc.jquery.gui.dialogs,
+ ca.ubc.jquery.gui.dnd,
+ ca.ubc.jquery.gui.results,
+ ca.ubc.jquery.gui.tree,
+ ca.ubc.jquery.gui.views,
+ ca.ubc.jquery.query
+Bundle-Vendor: University of British Columbia

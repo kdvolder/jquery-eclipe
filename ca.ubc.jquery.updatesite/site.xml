@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/ca.ubc.jquery.feature_1.0.16.jar" id="ca.ubc.jquery.feature" version="1.0.16"/>
+</site>

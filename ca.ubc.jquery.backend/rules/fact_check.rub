@@ -1,0 +1,69 @@
+//
+// fact_check.rub
+//
+
+/* 
+ * This file provides some machinery (rules and a TopLevel menu to invoke
+ * said rules) to check the consistency of the JQuery database. 
+ *
+ * A factbase is consistent if:
+ *   - it is closed (doesn't reference Elements not declared)
+ *   - appropriate information such as names etc. are supplied
+ *     for all elements as they should.
+ */
+
+inconsistency :: Element, String, [Object]
+MODES (F,F,F) IS NONDET END
+
+topQuery(["*debug","Fact Consistency Check"],"inconsistency(?E,?msg,?infos)",["?E", "?msg", "?infos"]).
+
+/////////// extends/implements relationship are closed?
+
+inconsistency(?superType,{extended by}, [?subType]) :-
+    extends(?subType,?superType), NOT(type(?superType)).
+
+inconsistency(?superType,{implemented by}, [?subType]) :-
+    implements(?subType,?superType), NOT(type(?superType)).
+
+inconsistency(?subType,{extends},[?superType]) :-
+    extends(?subType,?superType), NOT(type(?subType)).
+
+inconsistency(?subType,{implements}, [?superType]) :-
+    implements(?subType,?superType), NOT(type(?subType)).
+
+/////////// all RefType types must have a name and a sourcelocation
+
+inconsistency(?type,{Has no source location},[]) :-
+    type(?type), RefType(?type), NOT(sourceLocation(?type,?)).
+
+inconsistency(?type,{Has no name},[]) :-
+    type(?type), NOT(name(?type,?)), NOT(anonType(?type)).
+
+////////// all targets of calls facts should be declared methods or constructors ////    
+
+inconsistency(?Y,{Called by},[?X,?loc]) :-
+    calls(?X,?Y,?loc),NOT(method(?Y);constructor(?Y)).
+
+inconsistency(?X,{Calls}, [?Y,?loc]) :-
+    calls(?X,?Y,?loc),NOT(method(?X);constructor(?X);initializer(?X)).
+    
+//////// If there's a cast to some type ?T then this type must be declared //////////
+
+inconsistency(?T,{Used in TypeCast}, [?user,?loc]) :-
+	typeCast(?user,?T,?loc), NOT(type(?T)).
+	
+/////// Types used as argument, return or field types must be declared /////////////
+
+inconsistency(?T,{Used as type of field}, [?f]) :-
+	field(?f), type(?f,?T), NOT(type(?T)).
+	
+inconsistency(?T,{Used as return type}, [?M]) :-
+	returns(?M, ?T), NOT(type(?T)).
+	
+inconsistency(?T,{Used as argument type}, [?M]) :-
+	arg(?M,?T), NOT(type(?T)).
+	
+//////// al targets of field sets and gets should be declared ////
+
+inconsistency(?Y,{Read by}, [?loc]) :-
+    reads(?X,?Y,?loc),NOT(field(?Y)).

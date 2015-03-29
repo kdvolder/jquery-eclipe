@@ -1,0 +1,126 @@
+<project name="gluelogjquery" basedir="." default="jar_gluelog">
+
+
+	<!-- =================================================== -->
+	<!--                    GLOBALS							 -->	
+	<!-- =================================================== -->
+	
+	<!-- Properties -->
+	
+	<property name="workspaceDir" value="C:\Temp\newworkspace_april30"/>
+	
+	<property name="pluginsDir" value="${eclipseDir}/plugins"/>
+		
+	<property name="projectDir" value="${workspaceDir}/ca.ubc.jquery.backend.gluelog"/>
+	<property name="libDir" value="${projectDir}/lib"/>
+	<property name="libSourceDir" value="${projectDir}/lib"/>
+	
+	<property name="gluelogDir" value="${workspaceDir}/ca.ubc.gluelog"/>
+	<property name="gluelogBin" value="${gluelogDir}/bin"/>
+	<property name="gluelogSrc" value="${gluelogDir}/src"/>
+	
+	<property name="myschemeDir" value="${workspaceDir}/ca.kdvolder.MyScheme"/>
+	<property name="myschemeBin" value="${myschemeDir}/bin"/>
+	<property name="myschemeSrc" value="${myschemeDir}/src"/>
+	
+	<property name="featureDir" value="${projectDir}/feature"/>
+	<property name="featureDir.temp" value="${featureDir}/temp"/>
+	<property name="siteDir" value="${projectDir}/site"/>
+	
+	
+	<property name="version" value="3.1.6"/>
+	
+	
+	<!-- Classpath -->
+
+	<path id="cp">
+	    <pathelement path="src"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.core.resources_3.0.0/resources.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.ui_3.0.0/workbench.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.ui.win32_3.0.0/workbenchwin32.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.swt.win32_3.0.0/ws/win32/swt.jar"/>
+		<pathelement location="${pluginsDir}/org.eclipse.swt.motif_3.0.0/ws/motif/swt.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.core.runtime_3.0.0/runtime.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.jdt.core_3.0.0/jdtcore.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.jdt.ui_3.0.0/jdt.jar"/>
+	    <pathelement location="${pluginsDir}/org.apache.xerces_4.0.13/xmlParserAPIs.jar"/>
+	    <pathelement location="${pluginsDir}/org.apache.xerces_4.0.13/xercesImpl.jar"/>
+	    <pathelement location="${pluginsDir}/org.eclipse.core.boot_3.0.0/boot.jar"/>
+	    <pathelement location="${libDir}/jakarta-regexp-1.2.jar"/>
+	    <pathelement location="${libDir}/activation.jar"/>
+	    <pathelement location="${libDir}/mail.jar"/>
+	    <pathelement location="${libDir}/tyruba.jar"/>
+		<pathelement location="${libDir}/junit.jar"/>
+		<pathelement location="${libDir}/gluelog.jar"/>
+	</path>
+
+
+	<!-- =================================================== -->
+	<!--                    INIT							 -->	
+	<!-- =================================================== -->
+
+   <target name="init">
+   
+		<tstamp>
+			<format property="TODAY" pattern="yyyy-MMM-dd"/>
+  		</tstamp>
+
+   </target>
+
+	<!-- =================================================== -->
+	<!--                    JAR_SCHEME						 -->	
+	<!-- =================================================== -->
+
+	<target 
+		name="jar_scheme"
+		depends="init"
+		description="Creates a jar file from the myscheme project in the /lib directory.">
+
+		<!-- CREATE THE JAR FILE -->
+		
+		<jar 
+			jarfile="${libDir}/myscheme.jar" 
+			basedir="${myschemeBin}"
+			includes="**/*"
+		/>
+			
+		<!-- Include the sources from which jar was generated (for easy reference) -->
+		
+		<jar 
+		    jarfile="${libSourceDir}/myscheme_src.jar"
+		    basedir="${myschemeDir}"
+			includes="**/*"
+			excludes="**/*.tar* **/fdb*/** bin/** dist/** test*/** zip/** build/** jars/** perfdata/**"
+		/>  
+		
+	</target>
+
+	<!-- =================================================== -->
+	<!--                    JAR_GLUELOG 						 -->	
+	<!-- =================================================== -->
+
+	<target 
+		name="jar_gluelog"
+		depends="jar_scheme"
+		description="Creates a jar file from the gluelog project in the /lib directory.">
+
+		<!-- CREATE THE JAR FILE -->
+		
+		<jar 
+			jarfile="${libDir}/gluelog.jar" 
+			basedir="${gluelogBin}"
+			includes="**/*"
+		/>
+		
+		<!-- Include the sources from which jar was generated (for easy reference) -->
+		
+		<jar 
+		    jarfile="${libSourceDir}/gluelog_src.jar"
+		    basedir="${gluelogDir}"
+			includes="**/*"
+			excludes="**/*.tar* **/fdb*/** bin/** dist/** test*/** zip/** build/** jars/** perfdata/**"
+		/>  
+	
+	</target>
+	
+</project>

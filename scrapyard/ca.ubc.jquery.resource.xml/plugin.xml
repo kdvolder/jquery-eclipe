@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="ca.ubc.jquery.resource.xml"
+   name="JQuery XML Plug-in"
+   version="1.0.0"
+   provider-name="University of British Columbia"
+   class="ca.ubc.jquery.resource.xml.Activator">
+
+   <runtime>
+      <library name="xml.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="ca.ubc.jquery.backend"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui"/>
+   </requires>
+   <extension
+         id="ca.ubc.jquery.resource.xml"
+         name="XML Files"
+         point="ca.ubc.jquery.backend.resource">
+      <Resource
+            JQueryResource="ca.ubc.jquery.resource.xml.XMLStrategy">
+      </Resource>
+      <Definition
+            File="defs/initxml.rub">
+      </Definition>
+   </extension>
+   <extension
+         point="ca.ubc.jquery.backend.includeRules">
+      <RulesDefinition
+            File="defs/xmlui.rub"
+            Required="true">
+      </RulesDefinition>
+   </extension>
+
+</plugin>

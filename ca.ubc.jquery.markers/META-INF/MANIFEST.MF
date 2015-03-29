@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JQuery Markers Plug-in
+Bundle-SymbolicName: ca.ubc.jquery.markers; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: ca.ubc.jquery.markers.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ ca.ubc.jquery.backend
+Eclipse-LazyStart: true
+Bundle-Vendor: University of British Columbia
+Bundle-ClassPath: bin/

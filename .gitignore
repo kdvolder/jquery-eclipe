@@ -1,0 +1,13 @@
+/ca.ubc.jquery.backend/bin
+/ca.ubc.jquery.backend.testing/bin
+/ca.ubc.jquery.browser/bin
+/ca.ubc.jquery.editor/bin
+/ca.ubc.jquery.markers/bin
+/ca.ubc.jquery.refactoring/bin
+.cvsignore
+*~
+/ca.ubc.jquery.updatesite/*/*.jar
+/ca.ubc.jquery.updatesite/*.jar
+CVS
+/scrapyard/*/bin
+

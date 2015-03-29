@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="ca.ubc.jquery.browser.menuProvider">
+      <Provider
+            factoryClass="ca.ubc.jquery.refactoring.menus.RefactoringMenuProviderFactory">
+      </Provider>
+   </extension>
+   <extension
+         point="ca.ubc.jquery.backend.includeRules">
+      <RulesDefinition
+            File="rules/refactorings_core.rub"
+            Required="true">
+      </RulesDefinition>
+      <RulesDefinition
+            File="rules/refactorings.rub"
+            Required="false">
+      </RulesDefinition>
+   </extension>
+
+</plugin>

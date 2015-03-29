@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JQuery Textfiles Resource
+Bundle-SymbolicName: ca.ubc.jquery.resources.textfiles;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Vendor: University of British Columbia
+Require-Bundle: ca.ubc.jquery.backend,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime
+Import-Package: org.eclipse.jface.resource

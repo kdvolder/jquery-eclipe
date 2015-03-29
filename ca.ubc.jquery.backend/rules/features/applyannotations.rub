@@ -1,0 +1,11 @@
+applyAnnotation :: Object, [String], String, String, String
+MODES
+   (BOUND,FREE,FREE,FREE,FREE) IS NONDET
+END
+
+
+applyAnnotation(?this,["Feature...",?F],?F,"@Feature","names") :-
+	( type(?this);method(?this);field(?this) ), feature(?F).
+	
+applyAnnotation(?this,["Export...",?F],?F,"@Export","to") :-
+	( type(?this);method(?this);field(?this) ), feature(?F).

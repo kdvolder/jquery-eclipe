@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JQuery Backend JUnit Tests
+Bundle-SymbolicName: ca.ubc.jquery.backend.testing
+Bundle-Version: 1.0.0
+Bundle-Localization: plugin
+Require-Bundle: ca.ubc.jquery.backend,
+ org.eclipse.swt,
+ org.eclipse.ui,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.launching,
+ ca.ubc.jquery.browser,
+ org.junit

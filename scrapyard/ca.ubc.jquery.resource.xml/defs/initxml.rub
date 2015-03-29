@@ -1,0 +1,30 @@
+//
+// Persistent facts for the XML Parser
+//
+
+xchild :: Integer, Integer
+PERSISTENT MODES
+	(B,F) IS NONDET
+ 	(F,B) IS SEMIDET
+END
+
+xmlFile :: Integer, String
+PERSISTENT MODES
+	(F,F) IS NONDET
+END
+
+xmlNode :: Integer, String
+PERSISTENT MODES
+	(B,F) IS NONDET
+	(F,F) IS NONDET
+END
+
+xmlAttribute :: Integer, String, Integer
+PERSISTENT MODES
+	(B,F,F) IS NONDET
+END
+
+xmlValue :: Integer, String
+PERSISTENT MODES
+	(B,F) IS NONDET
+END
