@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JQuery Backend Plug-in
 Bundle-SymbolicName: ca.ubc.jquery.backend;singleton:=true
-Bundle-Version: 4.0.7
+Bundle-Version: 4.0.9.qualifier
 Bundle-Activator: ca.ubc.jquery.JQueryBackendPlugin
 Bundle-Vendor: University of British Columbia
 Bundle-Localization: plugin

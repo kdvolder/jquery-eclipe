@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JQuery Browser Plug-in
 Bundle-SymbolicName: ca.ubc.jquery.browser; singleton:=true
-Bundle-Version: 4.0.3
+Bundle-Version: 4.0.6.qualifier
 Bundle-Activator: ca.ubc.jquery.JQueryTreeBrowserPlugin
 Bundle-Localization: plugin
 Require-Bundle: ca.ubc.jquery.backend,
