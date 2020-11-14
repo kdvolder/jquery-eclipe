@@ -7,3 +7,4 @@ rubFolder :: String, String
 PERSISTENT MODES
 	(F,F) IS NONDET
 END
+

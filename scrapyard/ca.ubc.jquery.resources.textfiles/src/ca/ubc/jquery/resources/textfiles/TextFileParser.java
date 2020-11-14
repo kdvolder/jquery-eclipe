@@ -2,6 +2,7 @@ package ca.ubc.jquery.resources.textfiles;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 
 import ca.ubc.jquery.api.JQueryException;
 import ca.ubc.jquery.api.JQueryFactGenerator;
@@ -27,13 +28,14 @@ public class TextFileParser extends JQueryResourceParser {
 
 	public void parse() {
 		try {
-			getGenerator().insert("rubFile", new Object[] { res.getName() });
+			System.out.println("parse text: "+res.getFullPath());
+			IPath fullPath = res.getFullPath();
+			IPath folderPath = fullPath.removeLastSegments(1);
+			String fullPathStr = fullPath.toString();
+			getGenerator().insert("rubFile", new Object[] { fullPathStr });
 
-			String folder = res.getProjectRelativePath().toString();
-			folder = folder.substring(0, folder.indexOf(res.getName()));
-			getGenerator().insert("rubFolder", new Object[] { folder, res.getName() });
-
-			getGenerator().insertElementLocation(res.getName(), res.getFullPath().toString(), 0, 0);
+			getGenerator().insert("rubFolder", new Object[] { folderPath.toString(), fullPathStr });
+			getGenerator().insertElementLocation(fullPathStr, fullPathStr, 0, 0);
 		} catch (JQueryException e) {
 			System.err.println(e);
 		}

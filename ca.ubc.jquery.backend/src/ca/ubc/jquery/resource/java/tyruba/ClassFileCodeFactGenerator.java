@@ -7,6 +7,9 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+
+import com.sun.org.apache.xpath.internal.compiler.OpCodes;
 
 import tyRuBa.modes.TypeConstructor;
 
@@ -14,7 +17,7 @@ import tyRuBa.modes.TypeConstructor;
  * Byte code visitor for bytecode in methods
  * @author riecken
  */
-public class ClassFileCodeFactGenerator implements MethodVisitor {
+public class ClassFileCodeFactGenerator extends MethodVisitor {
 
 	//opcodes that i'm interested in
 	private static final int GETSTATIC = 178;
@@ -49,6 +52,7 @@ public class ClassFileCodeFactGenerator implements MethodVisitor {
 	private CodeFactBucket bucket;
 
 	public ClassFileCodeFactGenerator(Object typeRepresentation, Object methodRepresentation, String prettyMethodName, String prettyClassName, String prettyPackageName, CodeFactBucket bucket) {
+		super(Opcodes.ASM8);
 		this.bucket = bucket;
 		this.typeRepresentation = typeRepresentation;
 		this.methodRepresentation = methodRepresentation;
@@ -57,20 +61,6 @@ public class ClassFileCodeFactGenerator implements MethodVisitor {
 		this.prettyClassName = prettyClassName;
 	}
 
-	@Override
-	public void visitInsn(int arg0) {
-		//Nothing here I want right now
-	}
-
-	@Override
-	public void visitIntInsn(int arg0, int arg1) {
-		//Nothing here i want right now
-	}
-
-	@Override
-	public void visitVarInsn(int arg0, int arg1) {
-		//Nothing here i want right now
-	}
 
 	/** TYPE INSTRUCTIONS (NEW, INSTANCEOF, ANEWARRAY) **/
 	@Override
@@ -154,102 +144,10 @@ public class ClassFileCodeFactGenerator implements MethodVisitor {
 		}
 	}
 
-	@Override
-	public void visitJumpInsn(int arg0, Label arg1) {
-		//Nothing here i want right now
-	}
-
-	@Override
-	public void visitLabel(Label arg0) {
-		//Nothing here i want right now
-	}
-
-	@Override
-	public void visitLdcInsn(Object arg0) {
-		//Nothing here I want right now
-	}
-
-	@Override
-	public void visitIincInsn(int arg0, int arg1) {
-		//Nothing here i want right now
-	}
-
-	@Override
-	public void visitTableSwitchInsn(int arg0, int arg1, Label arg2, Label[] arg3) {
-		//Nothing here i want right now
-	}
-
-	@Override
-	public void visitLookupSwitchInsn(Label arg0, int[] arg1, Label[] arg2) {
-		//Nothing here I want right now
-	}
-
-	@Override
-	public void visitMultiANewArrayInsn(String arg0, int arg1) {
-		//Nothing here i want right now
-	}
-
-	@Override
-	public void visitTryCatchBlock(Label arg0, Label arg1, Label arg2, String arg3) {
-		//Nothing here I want right now
-	}
-
-	@Override
-	public void visitMaxs(int arg0, int arg1) {
-		//Nothing here i want right now
-	}
-
-	@Override
-	public void visitLineNumber(int arg0, Label arg1) {
-		//Nothing here I want right now
-	}
-
-	@Override
-	public void visitAttribute(Attribute arg0) {
-		//Nothing here I want right now
-	}
-
 	private Object getRepresentation(String value, TypeConstructor type) {
 		Object result = null;
 		result = bucket.makeTypeCast(type, bucket.getIntRep(value));
 		return result;
-	}
-
-	@Override
-	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-		//TODO: annotations in .class files parsing?
-		return null;
-	}
-
-	@Override
-	public AnnotationVisitor visitAnnotationDefault() {
-		//TODO: annotations in .class files parsing?
-		return null;
-	}
-
-	@Override
-	public void visitCode() {
-	}
-
-	@Override
-	public void visitEnd() {
-	}
-
-	@Override
-	public void visitFrame(int type, int local, Object[] local2, int stack,
-			Object[] stack2) {
-	}
-
-	@Override
-	public void visitLocalVariable(String name, String desc, String signature,
-			Label start, Label end, int index) {
-	}
-
-	@Override
-	public AnnotationVisitor visitParameterAnnotation(int parameter,
-			String desc, boolean visible) {
-		//TODO: annotations in .class files parsing?
-		return null;
 	}
 
 }

@@ -26,6 +26,18 @@ import ca.ubc.jquery.gui.results.ResultsTreeNode;
  * is sorted by the score automatically. This is just a quick hack.
  */
 public class ResultsTreeSorter extends ViewerSorter {
+	
+	static {
+		//This should work, but it doesn't. The property has to be set instead on commandline.
+		//Note: why set this. The array sort method used by Eclipse viewersorter in more recent
+		//versions of Java is not as tolerant as the legazy merge sort of changing the comparison
+		//semantics while sort is running. As jquery is changing/computing labels in bachground
+		//and labels factor into sorting... this causes the more modern sorter to throw exceptions.
+		//A 'proper' fix for this is likely somewhat complicated and will require that we
+		//block label updating while sorting is in progress or vice versa. This may also adversely
+		//affect performance if not done carefully (e.g. sorting constantly blocking label updates).
+		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+	}
 
 	public boolean byCategory = true;
 

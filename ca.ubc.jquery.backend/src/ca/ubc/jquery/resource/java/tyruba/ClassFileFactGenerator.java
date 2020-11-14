@@ -20,7 +20,7 @@ import tyRuBa.modes.TypeConstructor;
  * @category
  * @author riecken
  */
-public class ClassFileFactGenerator implements ClassVisitor {
+public class ClassFileFactGenerator extends ClassVisitor {
 
 	//Flag that controls whether facts are generated for method bodies (or just 
 	//for method signatures.
@@ -42,6 +42,7 @@ public class ClassFileFactGenerator implements ClassVisitor {
 	private String packageName;
 
 	public ClassFileFactGenerator(CodeFactBucket bucket, Object classFileRep, boolean generateFactsForMethodBodies) {
+		super(Opcodes.ASM8);
 		this.bucket = bucket;
 		this.classFileRep = classFileRep;
 		this.visitMethodBodies = generateFactsForMethodBodies;

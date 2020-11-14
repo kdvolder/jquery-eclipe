@@ -602,7 +602,7 @@ public class JQueryBackendPlugin extends AbstractUIPlugin implements ISavePartic
 			super.start(context);
 			JQueryBackendPlugin.traceUI("JQueryBackendPlugin: Starting up...............................");
 
-			PLUGIN_VERSION = "" + context.getBundle().getLastModified();
+			PLUGIN_VERSION = "" + context.getBundle().getVersion();
 
 			checkSaveDataVersion();
 

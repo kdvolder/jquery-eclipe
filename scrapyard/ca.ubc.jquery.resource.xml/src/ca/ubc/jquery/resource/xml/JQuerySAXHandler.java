@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 import org.eclipse.core.resources.IFile;
@@ -14,7 +12,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import ca.ubc.jquery.api.JQueryAPI;
 import ca.ubc.jquery.api.JQueryException;
 import ca.ubc.jquery.api.JQueryFactGenerator;
 

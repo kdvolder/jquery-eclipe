@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JQuery-Based Refactorings Plug-in
+Bundle-SymbolicName: ca.ubc.jquery.resource.xml; singleton:=true
+Bundle-Version: 1.0.1
+Bundle-Activator: ca.ubc.jquery.resource.xml.Activator
+Bundle-Vendor: University of British Columbia
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ ca.ubc.jquery.backend
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Eclipse-LazyStart: true
+Import-Package: org.eclipse.jdt.internal.corext.dom
+Bundle-ClassPath: bin/

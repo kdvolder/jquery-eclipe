@@ -1,7 +1,9 @@
 package ca.ubc.jquery.resources.textfiles;
 
 import java.util.Collection;
+import java.util.Objects;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
@@ -16,7 +18,8 @@ import ca.ubc.jquery.api.JQueryResourceStrategy;
 
 public class TextFileStrategy implements JQueryResourceStrategy {
 	private boolean matchExtension(IFile f) {
-		return f.getFileExtension().equalsIgnoreCase("rub");
+		String ext = f.getFileExtension();
+		return ext!=null && ext.equalsIgnoreCase("rub");
 	}
 
 	public void buildWorkingSet(IAdaptable element, Collection c) throws CoreException {
@@ -41,6 +44,15 @@ public class TextFileStrategy implements JQueryResourceStrategy {
 	}
 
 	public void addApplicableElementToCollection(IAdaptable element, Collection c) {
+		if (!(element instanceof IResource)) {
+			element = element.getAdapter(IResource.class);
+		}
+		if (element instanceof IResource) {
+			IResource rsrc = (IResource) element;
+			if (rsrc.isDerived()) {
+				return;
+			}
+		}
 		if (element instanceof IFile) {
 			IFile file = (IFile) element;
 			if (matchExtension(file)) {

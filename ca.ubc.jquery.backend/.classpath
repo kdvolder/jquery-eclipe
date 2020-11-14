@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="lib/tyruba.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="bin" sourcepath="bin"/>
 	<classpathentry exported="true" kind="lib" path="lib/featureannotations.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/tyruba.jar" sourcepath="lib/tyruba_src.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/asm-3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -12,5 +12,12 @@
             File="rules/rules.rub">
       </Definition>
    </extension>
+   <extension
+         point="ca.ubc.jquery.backend.includeRules">
+      <RulesDefinition
+            File="rules/menus.rub"
+            Required="true">
+      </RulesDefinition>
+   </extension>
 
 </plugin>

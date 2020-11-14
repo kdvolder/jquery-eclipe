@@ -4,7 +4,6 @@ Bundle-Name: JQuery Browser Plug-in
 Bundle-SymbolicName: ca.ubc.jquery.browser; singleton:=true
 Bundle-Version: 4.0.6.qualifier
 Bundle-Activator: ca.ubc.jquery.JQueryTreeBrowserPlugin
-Bundle-Localization: plugin
 Require-Bundle: ca.ubc.jquery.backend,
  org.eclipse.jdt.ui,
  org.eclipse.core.resources,
@@ -14,7 +13,7 @@ Require-Bundle: ca.ubc.jquery.backend,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.jdt.core,
  org.eclipse.jface.text
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: bin/
 Export-Package: ca.ubc.jquery;x-friends:="ca.ubc.jquery.backend.testing",
  ca.ubc.jquery.browser,
@@ -29,3 +28,5 @@ Export-Package: ca.ubc.jquery;x-friends:="ca.ubc.jquery.backend.testing",
  ca.ubc.jquery.gui.views,
  ca.ubc.jquery.query
 Bundle-Vendor: University of British Columbia
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Automatic-Module-Name: ca.ubc.jquery.browser

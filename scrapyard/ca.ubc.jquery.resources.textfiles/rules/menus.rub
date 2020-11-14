@@ -1,0 +1,3 @@
+topQuery(["Rub Files"],
+        "rubFile(?file), rubFolder(?folder,?file)",
+        ["?folder","?file"]).

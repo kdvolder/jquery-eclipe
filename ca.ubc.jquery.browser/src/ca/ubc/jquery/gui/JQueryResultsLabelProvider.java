@@ -2,9 +2,10 @@ package ca.ubc.jquery.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -153,9 +154,9 @@ public class JQueryResultsLabelProvider extends JavaElementLabelProvider impleme
 			doneImage = (img != null && img == element.cachedImage);
 			element.cachedLabel = label;
 			element.cachedImage = img;
-			System.out.println("done element = "+element);
-			System.out.println("done image = "+doneImage +" => "+img);
-			System.out.println("done label = "+doneLabel +" => "+label);
+//			System.out.println("done element = "+element);
+//			System.out.println("done image = "+doneImage +" => "+img);
+//			System.out.println("done label = "+doneLabel +" => "+label);
 			element.cachedLabel = label;
 			element.cachedImage = img;
 
@@ -183,7 +184,7 @@ public class JQueryResultsLabelProvider extends JavaElementLabelProvider impleme
 
 	private Map labelCachingJobs;
 
-	private List cachedNodes;
+	private Set<ResultsTreeNode> cachedNodes;
 
 	private Job sorterJob;
 	
@@ -205,7 +206,7 @@ public class JQueryResultsLabelProvider extends JavaElementLabelProvider impleme
 
 		imageCachingJobs = new HashMap();
 		labelCachingJobs = new HashMap();
-		cachedNodes = new ArrayList();
+		cachedNodes = new HashSet<>();
 
 		ImageDescriptor desc = JQueryTreeBrowserPlugin.getImageDescriptor("QueryView.gif");
 		queryNodeImage = new JavaElementImageDescriptor(desc, 0, JQueryAPI.getImageSize()).createImage();
@@ -221,7 +222,7 @@ public class JQueryResultsLabelProvider extends JavaElementLabelProvider impleme
 
 		imageCachingJobs = new HashMap();
 		labelCachingJobs = new HashMap();
-		cachedNodes = new ArrayList();
+		cachedNodes = new HashSet<>();
 
 		ImageDescriptor desc = JQueryTreeBrowserPlugin.getImageDescriptor("QueryView.gif");
 		queryNodeImage = new JavaElementImageDescriptor(desc, 0, JQueryAPI.getImageSize()).createImage();
@@ -342,7 +343,7 @@ public class JQueryResultsLabelProvider extends JavaElementLabelProvider impleme
 
 			addCachingJob(labelCachingJobs, node, j);
 		}
-
+		
 		return label;
 
 		//		// Output arrays as lists

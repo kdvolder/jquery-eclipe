@@ -77,7 +77,7 @@ public class WorkingSetFactBase implements JQueryFactBase {
 	private Map ruleBaseManagers = new IdentityMap();
 
 	// for creating/storing directory paths for tyruba rulebases
-	private static Map wsIDMap = new HashMap();
+	private static Map<IWorkingSet, Integer> wsIDMap = new HashMap<>();
 
 	private static int wsIDCounter = 100;
 
@@ -269,7 +269,7 @@ public class WorkingSetFactBase implements JQueryFactBase {
 	 */
 	private String getUniqueID(IWorkingSet set) {
 		Integer idNumber;
-		idNumber = (Integer) wsIDMap.get(set);
+		idNumber = wsIDMap.get(set);
 		if (idNumber == null) {
 			idNumber = wsIDCounter;
 			wsIDCounter = new Integer(idNumber.intValue() + 1);
@@ -695,8 +695,8 @@ public class WorkingSetFactBase implements JQueryFactBase {
 
 	private void saveState() {
 		File f = JQueryBackendPlugin.getDefault().getStateLocation().append(SERIAL_FILE).toFile();
-		Map temp = new HashMap(wsIDMap.size());
-		for (Iterator iter = wsIDMap.keySet().iterator(); iter.hasNext();) {
+		Map<String, Integer> temp = new HashMap<>(wsIDMap.size());
+		for (Iterator<IWorkingSet> iter = wsIDMap.keySet().iterator(); iter.hasNext();) {
 			IWorkingSet set = (IWorkingSet) iter.next();
 			temp.put(set.getName(), wsIDMap.get(set));
 		}
@@ -713,15 +713,16 @@ public class WorkingSetFactBase implements JQueryFactBase {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void restoreState() {
 		File f = JQueryBackendPlugin.getDefault().getStateLocation().append(SERIAL_FILE).toFile();
 		if (f.exists()) {
 			try {
 				ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(f)));
 
-				HashMap temp = (HashMap) ois.readObject();
-				wsIDMap = new HashMap(temp.size());
-				for (Iterator iter = temp.keySet().iterator(); iter.hasNext();) {
+				HashMap<String, Integer> temp = (HashMap<String, Integer>) ois.readObject();
+				wsIDMap = new HashMap<>(temp.size());
+				for (Iterator<String> iter = temp.keySet().iterator(); iter.hasNext();) {
 					String setName = (String) iter.next();
 					IWorkingSet set = workingSetManager.getWorkingSet(setName);
 					if (set != null) {
